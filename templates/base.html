@@ -41,8 +41,24 @@
                 <a class="sidebar-link" href="{{ url_for('profile') }}">
                     <i class="fas fa-user me-2"></i>My Profile
                 </a>
-                {% if current_user.role == 'admin' %}
+
+                <!-- Role-specific navigation -->
+                {% if current_user.role == 'student' %}
+                <a class="sidebar-link" href="{{ url_for('student_resources') }}">
+                    <i class="fas fa-book me-2"></i>Resources
+                </a>
+                {% elif current_user.role == 'faculty' %}
+                <a class="sidebar-link" href="{{ url_for('faculty_reports') }}">
+                    <i class="fas fa-chart-bar me-2"></i>Reports
+                </a>
+                {% elif current_user.role == 'admin' %}
                 <div class="sidebar-section">Admin</div>
+                <a class="sidebar-link" href="{{ url_for('admin_dashboard') }}">
+                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                </a>
+                <a class="sidebar-link" href="{{ url_for('admin_analytics') }}">
+                    <i class="fas fa-chart-pie me-2"></i>Analytics
+                </a>
                 <a class="sidebar-link" href="{{ url_for('admin_equipment') }}">
                     <i class="fas fa-gear me-2"></i>Manage Equipment
                 </a>

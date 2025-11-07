@@ -1,0 +1,428 @@
+{% extends "base.html" %}
+
+{% block title %}Learning Resources - SAU Lab Management{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+                <h3 class="mb-0"><i class="fas fa-book me-2"></i>Learning Resources</h3>
+                <small class="text-muted">Access study materials and lab guides</small>
+            </div>
+            <a href="{{ url_for('student_dashboard') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Access Tools -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-rocket me-2"></i>Quick Access Tools</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <div class="card h-100 border-primary">
+                            <div class="card-body text-center">
+                                <i class="fas fa-search fa-3x text-primary mb-3"></i>
+                                <h6>Equipment Search</h6>
+                                <p class="text-muted small">Find available equipment quickly</p>
+                                <button class="btn btn-primary btn-sm" onclick="quickEquipmentSearch()">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100 border-success">
+                            <div class="card-body text-center">
+                                <i class="fas fa-calendar-check fa-3x text-success mb-3"></i>
+                                <h6>Booking Status</h6>
+                                <p class="text-muted small">Check your current bookings</p>
+                                <button class="btn btn-success btn-sm" onclick="checkBookingStatus()">Check Status</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100 border-info">
+                            <div class="card-body text-center">
+                                <i class="fas fa-clock fa-3x text-info mb-3"></i>
+                                <h6>Lab Hours</h6>
+                                <p class="text-muted small">Current lab operating hours</p>
+                                <button class="btn btn-info btn-sm" onclick="showLabHours()">View Hours</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100 border-warning">
+                            <div class="card-body text-center">
+                                <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                                <h6>Emergency Contacts</h6>
+                                <p class="text-muted small">Important contact information</p>
+                                <button class="btn btn-warning btn-sm" onclick="showEmergencyContacts()">View Contacts</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Resource Categories -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-layer-group me-2"></i>Learning Resources</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <div class="card h-100 border-primary">
+                            <div class="card-body text-center">
+                                <i class="fas fa-file-pdf fa-3x text-danger mb-3"></i>
+                                <h6>Lab Manuals</h6>
+                                <p class="text-muted small">Step-by-step lab procedures</p>
+                                <button class="btn btn-primary btn-sm" onclick="showCategory('manuals')">View Manuals</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100 border-success">
+                            <div class="card-body text-center">
+                                <i class="fas fa-video fa-3x text-primary mb-3"></i>
+                                <h6>Video Tutorials</h6>
+                                <p class="text-muted small">Visual learning guides</p>
+                                <button class="btn btn-success btn-sm" onclick="showCategory('videos')">View Videos</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100 border-info">
+                            <div class="card-body text-center">
+                                <i class="fas fa-question-circle fa-3x text-info mb-3"></i>
+                                <h6>FAQs</h6>
+                                <p class="text-muted small">Common questions answered</p>
+                                <button class="btn btn-info btn-sm" onclick="showCategory('faqs')">View FAQs</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100 border-warning">
+                            <div class="card-body text-center">
+                                <i class="fas fa-tools fa-3x text-warning mb-3"></i>
+                                <h6>Equipment Guides</h6>
+                                <p class="text-muted small">How to use lab equipment</p>
+                                <button class="btn btn-warning btn-sm" onclick="showCategory('guides')">View Guides</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lab Manuals Section -->
+<div id="manuals-section" class="row mb-4" style="display: none;">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-file-pdf me-2"></i>Lab Manuals</h5>
+                <button class="btn btn-sm btn-outline-secondary" onclick="hideAllCategories()">Close</button>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-file-pdf text-danger me-2 fa-lg"></i>
+                                    <h6 class="mb-0">Basic Electronics Lab Manual</h6>
+                                </div>
+                                <p class="text-muted small mb-2">Covers fundamental electronic circuits and measurements</p>
+                                <small class="text-muted">Updated: Jan 2024 | 45 pages</small>
+                                <div class="mt-2">
+                                    <a href="#" class="btn btn-sm btn-primary">Download PDF</a>
+                                    <a href="#" class="btn btn-sm btn-outline-primary ms-1">View Online</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-file-pdf text-danger me-2 fa-lg"></i>
+                                    <h6 class="mb-0">Digital Logic Design Manual</h6>
+                                </div>
+                                <p class="text-muted small mb-2">Logic gates, combinational and sequential circuits</p>
+                                <small class="text-muted">Updated: Dec 2023 | 52 pages</small>
+                                <div class="mt-2">
+                                    <a href="#" class="btn btn-sm btn-primary">Download PDF</a>
+                                    <a href="#" class="btn btn-sm btn-outline-primary ms-1">View Online</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-file-pdf text-danger me-2 fa-lg"></i>
+                                    <h6 class="mb-0">Microprocessor Lab Manual</h6>
+                                </div>
+                                <p class="text-muted small mb-2">8085/8086 assembly programming and interfacing</p>
+                                <small class="text-muted">Updated: Feb 2024 | 38 pages</small>
+                                <div class="mt-2">
+                                    <a href="#" class="btn btn-sm btn-primary">Download PDF</a>
+                                    <a href="#" class="btn btn-sm btn-outline-primary ms-1">View Online</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Video Tutorials Section -->
+<div id="videos-section" class="row mb-4" style="display: none;">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-video me-2"></i>Video Tutorials</h5>
+                <button class="btn btn-sm btn-outline-secondary" onclick="hideAllCategories()">Close</button>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Lab Safety Tutorial" allowfullscreen></iframe>
+                                </div>
+                                <h6>Lab Safety & Equipment Handling</h6>
+                                <p class="text-muted small">Essential safety protocols and proper equipment usage</p>
+                                <small class="text-muted">Duration: 15 mins | Views: 1.2K</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="ratio ratio-16x9 mb-3">
+                                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Oscilloscope Tutorial" allowfullscreen></iframe>
+                                </div>
+                                <h6>Oscilloscope Operation Guide</h6>
+                                <p class="text-muted small">Complete tutorial on using digital oscilloscopes</p>
+                                <small class="text-muted">Duration: 22 mins | Views: 856</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="#" class="btn btn-primary">View All Video Tutorials</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FAQs Section -->
+<div id="faqs-section" class="row mb-4" style="display: none;">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-question-circle me-2"></i>Frequently Asked Questions</h5>
+                <button class="btn btn-sm btn-outline-secondary" onclick="hideAllCategories()">Close</button>
+            </div>
+            <div class="card-body">
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                How do I book equipment for my lab session?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Go to the Equipment section from your dashboard, browse available equipment, and click the "Book" button. Equipment is typically available for 7 days from booking date.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                What should I do if equipment is damaged?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Immediately report any damage to lab staff. Do not attempt to repair equipment yourself. Fill out the equipment damage report form available in the maintenance section.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                How do I extend my equipment booking?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Contact your faculty advisor or lab coordinator for booking extensions. Extensions are granted based on academic requirements and equipment availability.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                What are the lab operating hours?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Monday-Friday: 9:00 AM - 6:00 PM<br>
+                                Saturday: 9:00 AM - 2:00 PM<br>
+                                Sunday: Closed<br>
+                                Special arrangements can be made for research projects.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Equipment Guides Section -->
+<div id="guides-section" class="row mb-4" style="display: none;">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-tools me-2"></i>Equipment Operation Guides</h5>
+                <button class="btn btn-sm btn-outline-secondary" onclick="hideAllCategories()">Close</button>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6><i class="fas fa-microchip text-primary me-2"></i>Digital Multimeter</h6>
+                                <p class="text-muted small mb-2">Learn to measure voltage, current, and resistance accurately</p>
+                                <ul class="list-unstyled small">
+                                    <li><i class="fas fa-check text-success me-1"></i> Voltage measurement</li>
+                                    <li><i class="fas fa-check text-success me-1"></i> Current measurement</li>
+                                    <li><i class="fas fa-check text-success me-1"></i> Continuity testing</li>
+                                </ul>
+                                <a href="#" class="btn btn-sm btn-outline-primary">Read Guide</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6><i class="fas fa-wave-square text-info me-2"></i>Function Generator</h6>
+                                <p class="text-muted small mb-2">Generate various waveforms for circuit testing</p>
+                                <ul class="list-unstyled small">
+                                    <li><i class="fas fa-check text-success me-1"></i> Waveform selection</li>
+                                    <li><i class="fas fa-check text-success me-1"></i> Frequency adjustment</li>
+                                    <li><i class="fas fa-check text-success me-1"></i> Amplitude control</li>
+                                </ul>
+                                <a href="#" class="btn btn-sm btn-outline-primary">Read Guide</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-history me-2"></i>Recent Resource Access</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">Basic Electronics Lab Manual</h6>
+                                <p class="mb-1 text-muted small">Downloaded PDF version</p>
+                                <small class="text-muted">2 hours ago</small>
+                            </div>
+                            <i class="fas fa-file-pdf text-danger fa-lg"></i>
+                        </div>
+                    </div>
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">Lab Safety Tutorial Video</h6>
+                                <p class="mb-1 text-muted small">Watched complete video</p>
+                                <small class="text-muted">1 day ago</small>
+                            </div>
+                            <i class="fas fa-video text-primary fa-lg"></i>
+                        </div>
+                    </div>
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">Oscilloscope Operation Guide</h6>
+                                <p class="mb-1 text-muted small">Viewed equipment guide</p>
+                                <small class="text-muted">3 days ago</small>
+                            </div>
+                            <i class="fas fa-tools text-warning fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+function showCategory(category) {
+    // Hide all sections
+    hideAllCategories();
+
+    // Show selected category
+    document.getElementById(category + '-section').style.display = 'block';
+
+    // Scroll to the section
+    document.getElementById(category + '-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function hideAllCategories() {
+    const sections = ['manuals-section', 'videos-section', 'faqs-section', 'guides-section'];
+    sections.forEach(section => {
+        document.getElementById(section).style.display = 'none';
+    });
+}
+
+// Add smooth scrolling for anchor links
+document.addEventListener('DOMContentLoaded', function() {
+    const anchorLinks = document.querySelectorAll('a[href^="#"]');
+    anchorLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}

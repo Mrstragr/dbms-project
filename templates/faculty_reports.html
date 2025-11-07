@@ -1,0 +1,452 @@
+{% extends "base.html" %}
+
+{% block title %}Lab Reports & Analytics - SAU Lab Management{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+                <h3 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Lab Reports & Analytics</h3>
+                <small class="text-muted">Monitor lab usage and generate reports</small>
+            </div>
+            <a href="{{ url_for('faculty_dashboard') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Report Generation Tools -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-file-export me-2"></i>Generate Reports</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="card h-100 border-primary">
+                            <div class="card-body text-center">
+                                <i class="fas fa-calendar-alt fa-3x text-primary mb-3"></i>
+                                <h6>Usage Reports</h6>
+                                <p class="text-muted small">Equipment usage statistics</p>
+                                <button class="btn btn-primary btn-sm" onclick="generateReport('usage')">Generate</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-success">
+                            <div class="card-body text-center">
+                                <i class="fas fa-users fa-3x text-success mb-3"></i>
+                                <h6>Student Reports</h6>
+                                <p class="text-muted small">Student activity summaries</p>
+                                <button class="btn btn-success btn-sm" onclick="generateReport('students')">Generate</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-info">
+                            <div class="card-body text-center">
+                                <i class="fas fa-tools fa-3x text-info mb-3"></i>
+                                <h6>Maintenance Reports</h6>
+                                <p class="text-muted small">Equipment maintenance logs</p>
+                                <button class="btn btn-info btn-sm" onclick="generateReport('maintenance')">Generate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Analytics Dashboard -->
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Lab Usage Analytics</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6>Equipment Usage by Category</h6>
+                        <canvas id="usageChart" width="400" height="200"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Monthly Booking Trends</h6>
+                        <canvas id="bookingChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h6>Top Used Equipment</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Equipment</th>
+                                        <th>Total Bookings</th>
+                                        <th>Avg. Usage Time</th>
+                                        <th>Utilization Rate</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Digital Oscilloscope</td>
+                                        <td>45</td>
+                                        <td>6.2 hrs</td>
+                                        <td><span class="badge bg-success">85%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Function Generator</td>
+                                        <td>38</td>
+                                        <td>4.8 hrs</td>
+                                        <td><span class="badge bg-success">78%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Digital Multimeter</td>
+                                        <td>52</td>
+                                        <td>2.1 hrs</td>
+                                        <td><span class="badge bg-warning">65%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Power Supply</td>
+                                        <td>29</td>
+                                        <td>5.5 hrs</td>
+                                        <td><span class="badge bg-info">72%</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <!-- Key Metrics -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>Key Metrics</h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center mb-3">
+                    <div class="col-6">
+                        <h4 class="text-primary">164</h4>
+                        <small class="text-muted">Total Bookings</small>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-success">89%</h4>
+                        <small class="text-muted">Avg Utilization</small>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h4 class="text-info">23</h4>
+                        <small class="text-muted">Active Students</small>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-warning">3</h4>
+                        <small class="text-muted">Overdue Items</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Alerts -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-bell me-2"></i>Recent Alerts</h6>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning alert-sm mb-2">
+                    <small><i class="fas fa-exclamation-triangle me-1"></i>3 equipment items overdue</small>
+                </div>
+                <div class="alert alert-info alert-sm mb-2">
+                    <small><i class="fas fa-tools me-1"></i>Maintenance due for Oscilloscope #2</small>
+                </div>
+                <div class="alert alert-success alert-sm">
+                    <small><i class="fas fa-check-circle me-1"></i>All safety inspections passed</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Equipment Approval Queue -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Equipment Approval Queue</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Student</th>
+                                <th>Equipment</th>
+                                <th>Requested Date</th>
+                                <th>Duration</th>
+                                <th>Purpose</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <strong>John Smith</strong>
+                                    <br><small class="text-muted">CS-2021-001</small>
+                                </td>
+                                <td>Digital Oscilloscope</td>
+                                <td>2024-11-15</td>
+                                <td>7 days</td>
+                                <td>Project work</td>
+                                <td>
+                                    <button class="btn btn-sm btn-success me-1" onclick="approveRequest(1)">Approve</button>
+                                    <button class="btn btn-sm btn-danger" onclick="rejectRequest(1)">Reject</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Sarah Johnson</strong>
+                                    <br><small class="text-muted">CS-2021-015</small>
+                                </td>
+                                <td>Function Generator</td>
+                                <td>2024-11-16</td>
+                                <td>3 days</td>
+                                <td>Lab experiment</td>
+                                <td>
+                                    <button class="btn btn-sm btn-success me-1" onclick="approveRequest(2)">Approve</button>
+                                    <button class="btn btn-sm btn-danger" onclick="rejectRequest(2)">Reject</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lab Schedule Management -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Lab Schedule Management</h5>
+            </div>
+            <div class="card-body">
+                <h6>Current Lab Hours</h6>
+                <ul class="list-unstyled">
+                    <li><strong>Monday-Friday:</strong> 9:00 AM - 6:00 PM</li>
+                    <li><strong>Saturday:</strong> 9:00 AM - 2:00 PM</li>
+                    <li><strong>Sunday:</strong> Closed</li>
+                </ul>
+                <button class="btn btn-primary btn-sm" onclick="editSchedule()">Edit Schedule</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-comments me-2"></i>Student Feedback Review</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">Equipment condition feedback</h6>
+                                <p class="mb-1 text-muted small">"Oscilloscope was well-maintained and clean"</p>
+                                <small class="text-muted">John Smith - 2 days ago</small>
+                            </div>
+                            <span class="badge bg-success">Positive</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">Lab facility suggestion</h6>
+                                <p class="mb-1 text-muted small">"More power outlets needed in lab area"</p>
+                                <small class="text-muted">Sarah Johnson - 1 week ago</small>
+                            </div>
+                            <span class="badge bg-info">Suggestion</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-outline-primary btn-sm mt-2" onclick="viewAllFeedback()">View All Feedback</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Student Performance -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-graduation-cap me-2"></i>Student Lab Performance</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Bookings</th>
+                                <th>Avg. Session Time</th>
+                                <th>Equipment Used</th>
+                                <th>On-time Returns</th>
+                                <th>Performance Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <strong>John Smith</strong>
+                                    <br><small class="text-muted">CS-2021-001</small>
+                                </td>
+                                <td>12</td>
+                                <td>4.2 hrs</td>
+                                <td>8 types</td>
+                                <td><span class="badge bg-success">100%</span></td>
+                                <td><span class="badge bg-success">Excellent</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Sarah Johnson</strong>
+                                    <br><small class="text-muted">CS-2021-015</small>
+                                </td>
+                                <td>9</td>
+                                <td>3.8 hrs</td>
+                                <td>6 types</td>
+                                <td><span class="badge bg-success">89%</span></td>
+                                <td><span class="badge bg-success">Good</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Mike Davis</strong>
+                                    <br><small class="text-muted">CS-2021-023</small>
+                                </td>
+                                <td>7</td>
+                                <td>2.9 hrs</td>
+                                <td>4 types</td>
+                                <td><span class="badge bg-warning">67%</span></td>
+                                <td><span class="badge bg-warning">Needs Improvement</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Export Options -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-download me-2"></i>Export Data</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-primary w-100" onclick="exportData('pdf')">
+                            <i class="fas fa-file-pdf me-2"></i>Export as PDF
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-success w-100" onclick="exportData('excel')">
+                            <i class="fas fa-file-excel me-2"></i>Export as Excel
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-info w-100" onclick="exportData('csv')">
+                            <i class="fas fa-file-csv me-2"></i>Export as CSV
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-warning w-100" onclick="exportData('print')">
+                            <i class="fas fa-print me-2"></i>Print Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+function generateReport(type) {
+    alert(`Generating ${type} report... This feature will be implemented soon.`);
+}
+
+function exportData(format) {
+    alert(`Exporting data as ${format.toUpperCase()}... This feature will be implemented soon.`);
+}
+
+// Initialize charts
+document.addEventListener('DOMContentLoaded', function() {
+    // Usage Chart
+    const usageCtx = document.getElementById('usageChart').getContext('2d');
+    new Chart(usageCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Electronics', 'Measurement', 'Power', 'Others'],
+            datasets: [{
+                data: [35, 25, 20, 20],
+                backgroundColor: [
+                    '#007bff',
+                    '#28a745',
+                    '#ffc107',
+                    '#6c757d'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            }
+        }
+    });
+
+    // Booking Chart
+    const bookingCtx = document.getElementById('bookingChart').getContext('2d');
+    new Chart(bookingCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Monthly Bookings',
+                data: [12, 19, 15, 25, 22, 30],
+                borderColor: '#007bff',
+                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}

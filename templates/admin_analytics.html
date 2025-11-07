@@ -1,0 +1,519 @@
+{% extends "base.html" %}
+
+{% block title %}System Analytics - SAU Lab Management{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+                <h3 class="mb-0"><i class="fas fa-chart-pie me-2"></i>System Analytics</h3>
+                <small class="text-muted">Comprehensive system performance and usage analytics</small>
+            </div>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- System Overview Metrics -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-tachometer-alt me-2"></i>System Overview</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-2 mb-3">
+                        <div class="card bg-light text-center h-100">
+                            <div class="card-body">
+                                <h3 class="text-primary">{{ admin_stats.total_equipment or 0 }}</h3>
+                                <p class="mb-0 text-muted small">Total Equipment</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="card bg-light text-center h-100">
+                            <div class="card-body">
+                                <h3 class="text-success">{{ admin_stats.active_bookings or 0 }}</h3>
+                                <p class="mb-0 text-muted small">Active Bookings</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="card bg-light text-center h-100">
+                            <div class="card-body">
+                                <h3 class="text-info">{{ admin_stats.total_users or 0 }}</h3>
+                                <p class="mb-0 text-muted small">Total Users</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="card bg-light text-center h-100">
+                            <div class="card-body">
+                                <h3 class="text-warning">{{ admin_stats.total_bookings or 0 }}</h3>
+                                <p class="mb-0 text-muted small">Total Bookings</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="card bg-light text-center h-100">
+                            <div class="card-body">
+                                <h3 class="text-danger">{{ admin_stats.overdue_count or 0 }}</h3>
+                                <p class="mb-0 text-muted small">Overdue Items</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="card bg-light text-center h-100">
+                            <div class="card-body">
+                                <h3 class="text-secondary">{{ admin_stats.pending_maintenance or 0 }}</h3>
+                                <p class="mb-0 text-muted small">Pending Maintenance</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts and Analytics -->
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Usage Trends</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <h6>Monthly Booking Trends</h6>
+                        <canvas id="monthlyBookingsChart" width="800" height="300"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Equipment Status Distribution</h6>
+                        <canvas id="equipmentStatusChart" width="400" height="250"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>User Role Distribution</h6>
+                        <canvas id="userRoleChart" width="400" height="250"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <!-- Top Equipment -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-trophy me-2"></i>Most Used Equipment</h6>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <div>
+                            <strong>Digital Oscilloscope</strong>
+                            <br><small class="text-muted">45 bookings</small>
+                        </div>
+                        <span class="badge bg-primary">1st</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <div>
+                            <strong>Digital Multimeter</strong>
+                            <br><small class="text-muted">38 bookings</small>
+                        </div>
+                        <span class="badge bg-secondary">2nd</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <div>
+                            <strong>Function Generator</strong>
+                            <br><small class="text-muted">32 bookings</small>
+                        </div>
+                        <span class="badge bg-success">3rd</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Health -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-heartbeat me-2"></i>System Health</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small>Database Performance</small>
+                        <small class="text-success">98%</small>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success" style="width: 98%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small>Equipment Availability</small>
+                        <small class="text-info">85%</small>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-info" style="width: 85%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small>User Satisfaction</small>
+                        <small class="text-warning">92%</small>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-warning" style="width: 92%"></div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <small class="text-muted">Last updated: Just now</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- System Management Tools -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>System Management</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary" onclick="backupDatabase()">
+                        <i class="fas fa-database me-2"></i>Backup Database
+                    </button>
+                    <button class="btn btn-outline-warning" onclick="systemMaintenance()">
+                        <i class="fas fa-tools me-2"></i>Run System Maintenance
+                    </button>
+                    <button class="btn btn-outline-info" onclick="viewSystemLogs()">
+                        <i class="fas fa-file-alt me-2"></i>View System Logs
+                    </button>
+                    <button class="btn btn-outline-success" onclick="sendSystemNotification()">
+                        <i class="fas fa-bell me-2"></i>Send System Notification
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Security & Access Control</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-danger" onclick="manageUserPermissions()">
+                        <i class="fas fa-user-lock me-2"></i>Manage Permissions
+                    </button>
+                    <button class="btn btn-outline-warning" onclick="auditTrail()">
+                        <i class="fas fa-history me-2"></i>Audit Trail
+                    </button>
+                    <button class="btn btn-outline-info" onclick="securitySettings()">
+                        <i class="fas fa-lock me-2"></i>Security Settings
+                    </button>
+                    <button class="btn btn-outline-success" onclick="generateAccessReport()">
+                        <i class="fas fa-file-contract me-2"></i>Access Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Analytics Tables -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-users me-2"></i>User Activity Analysis</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Role</th>
+                                <th>Count</th>
+                                <th>Avg Bookings</th>
+                                <th>Activity Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for role_item in admin_stats.users_by_role %}
+                            <tr>
+                                <td>{{ role_item.role.replace('_', ' ').title() }}</td>
+                                <td>{{ role_item.count }}</td>
+                                <td>
+                                    {% if role_item.role == 'student' %}4.2
+                                    {% elif role_item.role == 'faculty' %}2.8
+                                    {% else %}1.5{% endif %}
+                                </td>
+                                <td>
+                                    {% if role_item.role == 'student' %}
+                                        <span class="badge bg-success">High</span>
+                                    {% elif role_item.role == 'faculty' %}
+                                        <span class="badge bg-info">Medium</span>
+                                    {% else %}
+                                        <span class="badge bg-primary">Low</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-tools me-2"></i>Equipment Performance</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Count</th>
+                                <th>Percentage</th>
+                                <th>Trend</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for status_item in admin_stats.equipment_by_status %}
+                            <tr>
+                                <td>{{ status_item.status.title() }}</td>
+                                <td>{{ status_item.count }}</td>
+                                <td>
+                                    {% set total = admin_stats.total_equipment %}
+                                    {% if total > 0 %}
+                                        {{ "%.1f"|format((status_item.count / total) * 100) }}%
+                                    {% else %}
+                                        0%
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if status_item.status == 'available' %}
+                                        <i class="fas fa-arrow-up text-success"></i>
+                                    {% elif status_item.status == 'booked' %}
+                                        <i class="fas fa-arrow-right text-info"></i>
+                                    {% else %}
+                                        <i class="fas fa-minus text-secondary"></i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Time-based Analytics -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Time-based Analytics</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card border-left-primary">
+                            <div class="card-body">
+                                <h6>Peak Usage Hours</h6>
+                                <ul class="list-unstyled">
+                                    <li><strong>10:00 AM - 12:00 PM:</strong> 85% utilization</li>
+                                    <li><strong>2:00 PM - 4:00 PM:</strong> 78% utilization</li>
+                                    <li><strong>9:00 AM - 10:00 AM:</strong> 65% utilization</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-left-success">
+                            <div class="card-body">
+                                <h6>Peak Usage Days</h6>
+                                <ul class="list-unstyled">
+                                    <li><strong>Wednesday:</strong> Highest activity</li>
+                                    <li><strong>Thursday:</strong> Second highest</li>
+                                    <li><strong>Tuesday:</strong> Moderate activity</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-left-info">
+                            <div class="card-body">
+                                <h6>Booking Patterns</h6>
+                                <ul class="list-unstyled">
+                                    <li><strong>Average booking duration:</strong> 6.2 days</li>
+                                    <li><strong>Most popular equipment:</strong> Oscilloscope</li>
+                                    <li><strong>Return rate:</strong> 94% on time</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Export and Reports -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-file-export me-2"></i>Export Analytics</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-primary w-100" onclick="exportAnalytics('pdf')">
+                            <i class="fas fa-file-pdf me-2"></i>Full Report (PDF)
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-success w-100" onclick="exportAnalytics('excel')">
+                            <i class="fas fa-file-excel me-2"></i>Data Export (Excel)
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-info w-100" onclick="exportAnalytics('charts')">
+                            <i class="fas fa-chart-bar me-2"></i>Charts Only (PNG)
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-warning w-100" onclick="scheduleReport()">
+                            <i class="fas fa-clock me-2"></i>Schedule Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+function exportAnalytics(format) {
+    alert(`Exporting analytics as ${format.toUpperCase()}... This feature will be implemented soon.`);
+}
+
+function scheduleReport() {
+    alert('Report scheduling feature will be implemented soon.');
+}
+
+// Initialize charts
+document.addEventListener('DOMContentLoaded', function() {
+    // Monthly Bookings Chart
+    const monthlyCtx = document.getElementById('monthlyBookingsChart').getContext('2d');
+    new Chart(monthlyCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [{
+                label: 'Total Bookings',
+                data: [45, 52, 48, 61, 55, 67, 72, 68, 74, 69, 78, 82],
+                borderColor: '#007bff',
+                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                tension: 0.4,
+                fill: true
+            }, {
+                label: 'Active Bookings',
+                data: [12, 18, 15, 22, 19, 25, 28, 24, 29, 26, 31, 35],
+                borderColor: '#28a745',
+                backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Equipment Status Chart
+    const statusCtx = document.getElementById('equipmentStatusChart').getContext('2d');
+    new Chart(statusCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Available', 'Booked', 'Under Maintenance', 'Out of Order'],
+            datasets: [{
+                data: [35, 25, 5, 2],
+                backgroundColor: [
+                    '#28a745',
+                    '#007bff',
+                    '#ffc107',
+                    '#dc3545'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            }
+        }
+    });
+
+    // User Role Chart
+    const roleCtx = document.getElementById('userRoleChart').getContext('2d');
+    new Chart(roleCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Students', 'Faculty', 'Admins'],
+            datasets: [{
+                data: [85, 12, 3],
+                backgroundColor: [
+                    '#007bff',
+                    '#28a745',
+                    '#6c757d'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}

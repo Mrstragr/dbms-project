@@ -1,0 +1,438 @@
+{% extends "base.html" %}
+
+{% block title %}Faculty Dashboard - SAU Lab Management{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+                <h3 class="mb-0"><i class="fas fa-gauge-high me-2"></i>Faculty Dashboard</h3>
+                <small class="text-muted">Welcome back, {{ current_user.username }}!</small>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary btn-sm" onclick="refreshDashboard()">
+                    <i class="fas fa-sync-alt me-1"></i>Refresh
+                </button>
+                <a href="{{ url_for('notifications') }}" class="btn btn-outline-info btn-sm">
+                    <i class="fas fa-bell me-1"></i>Notifications
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Faculty Stats Row -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="text-muted small">Active Bookings</div>
+                        <h3 class="text-primary">{{ faculty_stats.active_bookings or 0 }}</h3>
+                        <small class="text-success">
+                            <i class="fas fa-arrow-up me-1"></i>Current
+                        </small>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-calendar-check fa-2x status-booked"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="text-muted small">Total Bookings</div>
+                        <h3 class="text-info">{{ faculty_stats.total_bookings or 0 }}</h3>
+                        <small class="text-muted">
+                            <i class="fas fa-history me-1"></i>All time
+                        </small>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-history fa-2x text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="text-muted small">Available Equipment</div>
+                        <h3 class="text-success">{{ available_equipment|length }}</h3>
+                        <small class="text-muted">
+                            <i class="fas fa-check-circle me-1"></i>Ready to book
+                        </small>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-laptop fa-2x status-available"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="text-muted small">Account Status</div>
+                        <h5 class="text-warning">{{ current_user.role.title() }}</h5>
+                        <small class="text-muted">
+                            <i class="fas fa-shield-alt me-1"></i>Verified
+                        </small>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-user-tag fa-2x text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions Row -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h6>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <a href="{{ url_for('equipment_list') }}" class="btn btn-outline-primary w-100 h-100 d-flex flex-column align-items-center p-3">
+                            <i class="fas fa-laptop fa-2x mb-2"></i>
+                            <span>Browse Equipment</span>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('profile') }}" class="btn btn-outline-success w-100 h-100 d-flex flex-column align-items-center p-3">
+                            <i class="fas fa-user-edit fa-2x mb-2"></i>
+                            <span>Update Profile</span>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('notifications') }}" class="btn btn-outline-info w-100 h-100 d-flex flex-column align-items-center p-3">
+                            <i class="fas fa-bell fa-2x mb-2"></i>
+                            <span>View Notifications</span>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('maintenance') }}" class="btn btn-outline-warning w-100 h-100 d-flex flex-column align-items-center p-3">
+                            <i class="fas fa-tools fa-2x mb-2"></i>
+                            <span>Maintenance Status</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Area -->
+<div class="row">
+    <!-- Recent Activity & Bookings -->
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-calendar-alt me-2"></i>My Recent Bookings
+                </h5>
+                <a href="{{ url_for('equipment_list') }}" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-plus me-1"></i>New Booking
+                </a>
+            </div>
+            <div class="card-body">
+                {% if user_bookings %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Equipment</th>
+                                <th>Type</th>
+                                <th>Booking Date</th>
+                                <th>Return Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in user_bookings[:10] %}
+                            <tr>
+                                <td>
+                                    <strong>{{ booking.equipment_name }}</strong>
+                                    <br><small class="text-muted">{{ booking.location or 'N/A' }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark">{{ booking.equipment_type.title() }}</span>
+                                </td>
+                                <td>{{ booking.booking_date.strftime('%b %d, %Y') }}</td>
+                                <td>
+                                    {% if booking.return_date %}
+                                        {{ booking.return_date.strftime('%b %d, %Y') }}
+                                        {% if booking.status == 'active' and booking.return_date < datetime.now() %}
+                                            <br><small class="text-danger">Overdue</small>
+                                        {% endif %}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if booking.status == 'active' %}
+                                        <span class="badge bg-primary">
+                                            <i class="fas fa-clock me-1"></i>Active
+                                        </span>
+                                    {% elif booking.status == 'returned' %}
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check me-1"></i>Returned
+                                        </span>
+                                    {% elif booking.status == 'cancelled' %}
+                                        <span class="badge bg-secondary">
+                                            <i class="fas fa-times me-1"></i>Cancelled
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-warning">{{ booking.status.title() }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if booking.status == 'active' %}
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a href="{{ url_for('return_equipment', booking_id=booking.booking_id) }}"
+                                           class="btn btn-outline-success"
+                                           onclick="return confirm('Are you sure you want to return this equipment?')"
+                                           title="Return Equipment">
+                                            <i class="fas fa-undo"></i>
+                                        </a>
+                                        <a href="{{ url_for('cancel_booking', booking_id=booking.booking_id) }}"
+                                           class="btn btn-outline-danger"
+                                           onclick="return confirm('Are you sure you want to cancel this booking?')"
+                                           title="Cancel Booking">
+                                            <i class="fas fa-times"></i>
+                                        </a>
+                                    </div>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% if user_bookings|length > 10 %}
+                    <div class="text-center mt-3">
+                        <small class="text-muted">Showing 10 most recent bookings</small>
+                    </div>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                    <h6 class="text-muted">No Bookings Yet</h6>
+                    <p class="text-muted small">Start by browsing available equipment</p>
+                    <a href="{{ url_for('equipment_list') }}" class="btn btn-primary">
+                        <i class="fas fa-laptop me-2"></i>Browse Equipment
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Widgets -->
+    <div class="col-md-4">
+        <!-- Available Equipment -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-laptop me-2"></i>Quick Book Equipment
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if available_equipment %}
+                <div class="list-group list-group-flush">
+                    {% for equipment in available_equipment[:6] %}
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">{{ equipment.equipment_name }}</h6>
+                            <small class="text-muted">
+                                <i class="fas fa-tag me-1"></i>{{ equipment.equipment_type }}
+                                {% if equipment.location %}
+                                    <br><i class="fas fa-map-marker-alt me-1"></i>{{ equipment.location }}
+                                {% endif %}
+                            </small>
+                        </div>
+                        <a href="{{ url_for('book_equipment', equipment_id=equipment.equipment_id) }}"
+                           class="btn btn-sm btn-primary ms-2"
+                           onclick="return confirm('Book {{ equipment.equipment_name }} for 7 days?')"
+                           title="Book this equipment">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if available_equipment|length > 6 %}
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('equipment_list') }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-search me-1"></i>View All Equipment
+                    </a>
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+                    <p class="text-muted small mb-0">No equipment available at the moment</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Recent Maintenance -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-tools me-2"></i>Recent Maintenance
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if recent_maintenance %}
+                <div class="list-group list-group-flush">
+                    {% for maintenance in recent_maintenance %}
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ maintenance.equipment_name }}</h6>
+                                <p class="mb-1 small text-muted">{{ maintenance.description }}</p>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>{{ maintenance.maintenance_date.strftime('%b %d, %Y') }}
+                                </small>
+                            </div>
+                            <span class="badge bg-{{ 'success' if maintenance.status == 'completed' else 'warning' }} ms-2">
+                                {{ maintenance.status.title() }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-wrench fa-2x text-muted mb-2"></i>
+                    <p class="text-muted small mb-0">No recent maintenance records</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Faculty Resources -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-graduation-cap me-2"></i>Faculty Resources
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <a href="{{ url_for('add_maintenance') }}" class="list-group-item list-group-item-action px-0">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-plus-circle text-success me-3"></i>
+                            <div>
+                                <div class="fw-bold">Schedule Maintenance</div>
+                                <small class="text-muted">Add maintenance records</small>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="{{ url_for('maintenance') }}" class="list-group-item list-group-item-action px-0">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-tools text-warning me-3"></i>
+                            <div>
+                                <div class="fw-bold">View Maintenance</div>
+                                <small class="text-muted">Check maintenance history</small>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action px-0">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-chart-bar text-info me-3"></i>
+                            <div>
+                                <div class="fw-bold">Lab Reports</div>
+                                <small class="text-muted">Generate usage reports</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>System Status
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-server text-success me-2"></i>
+                    <span class="small">Database: Online</span>
+                </div>
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-shield-alt text-success me-2"></i>
+                    <span class="small">Security: Active</span>
+                </div>
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-clock text-info me-2"></i>
+                    <span class="small">Last Updated: Just now</span>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <small class="text-muted">
+                        <i class="fas fa-question-circle me-1"></i>
+                        Need help? <a href="#" class="text-primary">Contact Support</a>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+function refreshDashboard() {
+    location.reload();
+}
+
+// Auto-refresh dashboard every 5 minutes
+setInterval(function() {
+    // Only refresh if page is visible
+    if (!document.hidden) {
+        // Optional: Add a subtle indicator that refresh happened
+        console.log('Dashboard auto-refreshed');
+    }
+}, 300000); // 5 minutes
+
+// Add loading states for actions
+document.addEventListener('DOMContentLoaded', function() {
+    const actionButtons = document.querySelectorAll('.btn-group a');
+    actionButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            if (this.onclick && !confirm(this.onclick.toString().match(/'([^']+)'/)[1])) {
+                e.preventDefault();
+                return false;
+            }
+            // Add loading state
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            this.disabled = true;
+        });
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}

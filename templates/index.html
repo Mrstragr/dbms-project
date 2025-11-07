@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Home - SAU Lab Management{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="jumbotron bg-primary text-white rounded p-5 mb-4">
+            <h1 class="display-4">
+                <i class="fas fa-rocket me-3"></i>
+                SAU Equipment & Lab Resource Management System
+            </h1>
+            <p class="lead">Efficiently manage laboratory equipment, track bookings, returns, and maintenance with real-time availability.</p>
+            <hr class="my-4">
+            <p>Streamline your lab operations with our comprehensive equipment management solution.</p>
+            {% if not current_user.is_authenticated %}
+            <a class="btn btn-light btn-lg" href="{{ url_for('login') }}" role="button">
+                <i class="fas fa-sign-in-alt me-2"></i>Get Started
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-laptop fa-3x text-primary mb-3"></i>
+                <h5 class="card-title">Equipment Tracking</h5>
+                <p class="card-text">Track all laboratory equipment including laptops, projectors, oscilloscopes, and more with real-time status updates.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-calendar-check fa-3x text-success mb-3"></i>
+                <h5 class="card-title">Booking Management</h5>
+                <p class="card-text">Easy booking and return system with automated notifications for overdue returns and maintenance reminders.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-wrench fa-3x text-warning mb-3"></i>
+                <h5 class="card-title">Maintenance Tracking</h5>
+                <p class="card-text">Comprehensive maintenance tracking with condition monitoring and automated reminder system.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-users me-2"></i>User Roles
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-user-graduate fa-2x text-info mb-2"></i>
+                        <h6>Students</h6>
+                        <p class="small">Book and return equipment, view availability</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-user-tie fa-2x text-warning mb-2"></i>
+                        <h6>Lab Assistants</h6>
+                        <p class="small">Manage equipment, track maintenance</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-user-shield fa-2x text-danger mb-2"></i>
+                        <h6>Faculty/Admin</h6>
+                        <p class="small">Full system access, approve requests</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Equipment - SAU Lab Management{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-edit me-2"></i>Edit Equipment</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3">
+                        <label for="equipment_name" class="form-label">Equipment Name</label>
+                        <input type="text" class="form-control" id="equipment_name" name="equipment_name" 
+                               value="{{ equipment.equipment_name }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="equipment_type" class="form-label">Equipment Type</label>
+                        <select class="form-select" id="equipment_type" name="equipment_type" required>
+                            <option value="laptop" {% if equipment.equipment_type == 'laptop' %}selected{% endif %}>Laptop</option>
+                            <option value="projector" {% if equipment.equipment_type == 'projector' %}selected{% endif %}>Projector</option>
+                            <option value="oscilloscope" {% if equipment.equipment_type == 'oscilloscope' %}selected{% endif %}>Oscilloscope</option>
+                            <option value="multimeter" {% if equipment.equipment_type == 'multimeter' %}selected{% endif %}>Multimeter</option>
+                            <option value="power_supply" {% if equipment.equipment_type == 'power_supply' %}selected{% endif %}>Power Supply</option>
+                            <option value="microscope" {% if equipment.equipment_type == 'microscope' %}selected{% endif %}>Microscope</option>
+                            <option value="other" {% if equipment.equipment_type == 'other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3">{{ equipment.description }}</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location" name="location" 
+                               value="{{ equipment.location }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="available" {% if equipment.status == 'available' %}selected{% endif %}>Available</option>
+                            <option value="booked" {% if equipment.status == 'booked' %}selected{% endif %}>Booked</option>
+                            <option value="maintenance" {% if equipment.status == 'maintenance' %}selected{% endif %}>Under Maintenance</option>
+                            <option value="retired" {% if equipment.status == 'retired' %}selected{% endif %}>Retired</option>
+                        </select>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('admin_equipment') }}" class="btn btn-secondary me-md-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Update Equipment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

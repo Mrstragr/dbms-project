@@ -1,0 +1,570 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications - SAU Lab Management{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <h2 class="mb-0"><i class="fas fa-bell me-2"></i>Notifications Center</h2>
+                <small class="text-muted">Stay updated with your lab activities and system alerts</small>
+            </div>
+            <div class="d-flex gap-2">
+                {% if unread_count > 0 %}
+                <button class="btn btn-outline-primary" onclick="markAllAsRead()">
+                    <i class="fas fa-check-double me-2"></i>Mark All Read
+                </button>
+                {% endif %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notification Stats -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body text-center">
+                <h4 class="text-primary">{{ notifications|length }}</h4>
+                <small class="text-muted">Total Notifications</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body text-center">
+                <h4 class="text-info">{{ unread_count }}</h4>
+                <small class="text-muted">Unread</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body text-center">
+                <h4 class="text-success">{{ notifications|selectattr('type', 'equalto', 'booking')|list|length }}</h4>
+                <small class="text-muted">Booking Updates</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body text-center">
+                <h4 class="text-warning">{{ notifications|selectattr('type', 'equalto', 'maintenance')|list|length }}</h4>
+                <small class="text-muted">Maintenance Alerts</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Tabs -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <ul class="nav nav-tabs" id="notificationTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all-notifications"
+                                type="button" role="tab" aria-controls="all-notifications" aria-selected="true">
+                            <i class="fas fa-list me-1"></i>All Notifications
+                            {% if unread_count > 0 %}
+                            <span class="badge bg-primary ms-1">{{ unread_count }}</span>
+                            {% endif %}
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="unread-tab" data-bs-toggle="tab" data-bs-target="#unread-notifications"
+                                type="button" role="tab" aria-controls="unread-notifications" aria-selected="false">
+                            <i class="fas fa-envelope me-1"></i>Unread
+                            {% if unread_count > 0 %}
+                            <span class="badge bg-danger ms-1">{{ unread_count }}</span>
+                            {% endif %}
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="booking-tab" data-bs-toggle="tab" data-bs-target="#booking-notifications"
+                                type="button" role="tab" aria-controls="booking-notifications" aria-selected="false">
+                            <i class="fas fa-calendar-check me-1"></i>Bookings
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="maintenance-tab" data-bs-toggle="tab" data-bs-target="#maintenance-notifications"
+                                type="button" role="tab" aria-controls="maintenance-notifications" aria-selected="false">
+                            <i class="fas fa-tools me-1"></i>Maintenance
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notifications Content -->
+<div class="row">
+    <div class="col-12">
+        <div class="tab-content" id="notificationTabsContent">
+            <!-- All Notifications -->
+            <div class="tab-pane fade show active" id="all-notifications" role="tabpanel" aria-labelledby="all-tab">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <i class="fas fa-bell me-2 text-primary"></i>
+                        <h5 class="mb-0">All Notifications</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if notifications %}
+                        <div class="notification-list">
+                            {% for notification in notifications %}
+                            <div class="notification-item {% if not notification.is_read %}unread{% endif %} p-3 border-bottom"
+                                 id="notification-{{ notification.notification_id }}"
+                                 data-type="{{ notification.type }}">
+                                <div class="d-flex align-items-start">
+                                    <div class="notification-icon me-3">
+                                        {% if notification.type == 'booking' %}
+                                            <div class="icon-circle bg-primary">
+                                                <i class="fas fa-calendar-check text-white"></i>
+                                            </div>
+                                        {% elif notification.type == 'return' %}
+                                            <div class="icon-circle bg-success">
+                                                <i class="fas fa-undo text-white"></i>
+                                            </div>
+                                        {% elif notification.type == 'maintenance' %}
+                                            <div class="icon-circle bg-warning">
+                                                <i class="fas fa-wrench text-white"></i>
+                                            </div>
+                                        {% elif notification.type == 'overdue' %}
+                                            <div class="icon-circle bg-danger">
+                                                <i class="fas fa-exclamation-triangle text-white"></i>
+                                            </div>
+                                        {% else %}
+                                            <div class="icon-circle bg-info">
+                                                <i class="fas fa-info-circle text-white"></i>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h6 class="mb-1 {{ 'fw-bold' if not notification.is_read else '' }}">
+                                                {{ notification.title }}
+                                                {% if not notification.is_read %}
+                                                <span class="badge bg-primary ms-2">New</span>
+                                                {% endif %}
+                                            </h6>
+                                            <small class="text-muted">
+                                                {{ notification.created_at.strftime('%b %d, %Y %H:%M') if notification.created_at else 'N/A' }}
+                                            </small>
+                                        </div>
+                                        <p class="mb-2 text-muted">{{ notification.message }}</p>
+                                        <div class="notification-actions">
+                                            {% if not notification.is_read %}
+                                            <button class="btn btn-sm btn-outline-primary me-2"
+                                                    onclick="markAsRead({{ notification.notification_id }})">
+                                                <i class="fas fa-check me-1"></i>Mark Read
+                                            </button>
+                                            {% endif %}
+                                            <span class="badge bg-light text-dark">
+                                                <i class="fas fa-tag me-1"></i>{{ notification.type.title() }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-bell-slash fa-4x text-muted mb-3"></i>
+                            <h5 class="text-muted">No Notifications</h5>
+                            <p class="text-muted">You're all caught up! New notifications will appear here.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unread Notifications -->
+            <div class="tab-pane fade" id="unread-notifications" role="tabpanel" aria-labelledby="unread-tab">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <i class="fas fa-envelope me-2 text-info"></i>
+                        <h5 class="mb-0">Unread Notifications</h5>
+                    </div>
+                    <div class="card-body">
+                        {% set unread_notifications = notifications|selectattr('is_read', 'equalto', False)|list %}
+                        {% if unread_notifications %}
+                        <div class="notification-list">
+                            {% for notification in unread_notifications %}
+                            <div class="notification-item unread p-3 border-bottom"
+                                 id="unread-notification-{{ notification.notification_id }}">
+                                <div class="d-flex align-items-start">
+                                    <div class="notification-icon me-3">
+                                        {% if notification.type == 'booking' %}
+                                            <div class="icon-circle bg-primary">
+                                                <i class="fas fa-calendar-check text-white"></i>
+                                            </div>
+                                        {% elif notification.type == 'return' %}
+                                            <div class="icon-circle bg-success">
+                                                <i class="fas fa-undo text-white"></i>
+                                            </div>
+                                        {% elif notification.type == 'maintenance' %}
+                                            <div class="icon-circle bg-warning">
+                                                <i class="fas fa-wrench text-white"></i>
+                                            </div>
+                                        {% elif notification.type == 'overdue' %}
+                                            <div class="icon-circle bg-danger">
+                                                <i class="fas fa-exclamation-triangle text-white"></i>
+                                            </div>
+                                        {% else %}
+                                            <div class="icon-circle bg-info">
+                                                <i class="fas fa-info-circle text-white"></i>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h6 class="mb-1 fw-bold">{{ notification.title }}</h6>
+                                            <small class="text-muted">
+                                                {{ notification.created_at.strftime('%b %d, %Y %H:%M') if notification.created_at else 'N/A' }}
+                                            </small>
+                                        </div>
+                                        <p class="mb-2 text-muted">{{ notification.message }}</p>
+                                        <div class="notification-actions">
+                                            <button class="btn btn-sm btn-outline-primary me-2"
+                                                    onclick="markAsRead({{ notification.notification_id }})">
+                                                <i class="fas fa-check me-1"></i>Mark Read
+                                            </button>
+                                            <span class="badge bg-light text-dark">
+                                                <i class="fas fa-tag me-1"></i>{{ notification.type.title() }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-check-circle fa-4x text-success mb-3"></i>
+                            <h5 class="text-success">All Caught Up!</h5>
+                            <p class="text-muted">You have no unread notifications.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Notifications -->
+            <div class="tab-pane fade" id="booking-notifications" role="tabpanel" aria-labelledby="booking-tab">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <i class="fas fa-calendar-check me-2 text-primary"></i>
+                        <h5 class="mb-0">Booking Notifications</h5>
+                    </div>
+                    <div class="card-body">
+                        {% set booking_notifications = notifications|selectattr('type', 'equalto', 'booking')|list %}
+                        {% if booking_notifications %}
+                        <div class="notification-list">
+                            {% for notification in booking_notifications %}
+                            <div class="notification-item {% if not notification.is_read %}unread{% endif %} p-3 border-bottom">
+                                <div class="d-flex align-items-start">
+                                    <div class="notification-icon me-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-calendar-check text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h6 class="mb-1 {{ 'fw-bold' if not notification.is_read else '' }}">
+                                                {{ notification.title }}
+                                                {% if not notification.is_read %}
+                                                <span class="badge bg-primary ms-2">New</span>
+                                                {% endif %}
+                                            </h6>
+                                            <small class="text-muted">
+                                                {{ notification.created_at.strftime('%b %d, %Y %H:%M') if notification.created_at else 'N/A' }}
+                                            </small>
+                                        </div>
+                                        <p class="mb-2 text-muted">{{ notification.message }}</p>
+                                        <div class="notification-actions">
+                                            {% if not notification.is_read %}
+                                            <button class="btn btn-sm btn-outline-primary me-2"
+                                                    onclick="markAsRead({{ notification.notification_id }})">
+                                                <i class="fas fa-check me-1"></i>Mark Read
+                                            </button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                            <h5 class="text-muted">No Booking Notifications</h5>
+                            <p class="text-muted">Your booking-related notifications will appear here.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Maintenance Notifications -->
+            <div class="tab-pane fade" id="maintenance-notifications" role="tabpanel" aria-labelledby="maintenance-tab">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <i class="fas fa-tools me-2 text-warning"></i>
+                        <h5 class="mb-0">Maintenance Notifications</h5>
+                    </div>
+                    <div class="card-body">
+                        {% set maintenance_notifications = notifications|selectattr('type', 'equalto', 'maintenance')|list %}
+                        {% if maintenance_notifications %}
+                        <div class="notification-list">
+                            {% for notification in maintenance_notifications %}
+                            <div class="notification-item {% if not notification.is_read %}unread{% endif %} p-3 border-bottom">
+                                <div class="d-flex align-items-start">
+                                    <div class="notification-icon me-3">
+                                        <div class="icon-circle bg-warning">
+                                            <i class="fas fa-wrench text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h6 class="mb-1 {{ 'fw-bold' if not notification.is_read else '' }}">
+                                                {{ notification.title }}
+                                                {% if not notification.is_read %}
+                                                <span class="badge bg-warning ms-2">New</span>
+                                                {% endif %}
+                                            </h6>
+                                            <small class="text-muted">
+                                                {{ notification.created_at.strftime('%b %d, %Y %H:%M') if notification.created_at else 'N/A' }}
+                                            </small>
+                                        </div>
+                                        <p class="mb-2 text-muted">{{ notification.message }}</p>
+                                        <div class="notification-actions">
+                                            {% if not notification.is_read %}
+                                            <button class="btn btn-sm btn-outline-warning me-2"
+                                                    onclick="markAsRead({{ notification.notification_id }})">
+                                                <i class="fas fa-check me-1"></i>Mark Read
+                                            </button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-tools fa-4x text-muted mb-3"></i>
+                            <h5 class="text-muted">No Maintenance Notifications</h5>
+                            <p class="text-muted">Maintenance-related notifications will appear here.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- System Alerts (Admin Only) -->
+{% if current_user.role == 'admin' %}
+<div class="row mt-4">
+    <!-- Overdue Bookings Alert -->
+    {% if overdue_bookings %}
+    <div class="col-md-6 mb-4">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white d-flex align-items-center">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <h6 class="mb-0">Overdue Returns ({{ overdue_bookings|length }})</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Equipment</th>
+                                <th>User</th>
+                                <th>Days Overdue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in overdue_bookings[:5] %}
+                            <tr>
+                                <td class="fw-bold">{{ booking.equipment_name }}</td>
+                                <td>{{ booking.username }}</td>
+                                <td>
+                                    <span class="badge bg-danger">
+                                        {{ ((datetime.now() - booking.return_date).days if booking.return_date else 0) }} days
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% if overdue_bookings|length > 5 %}
+                    <div class="text-center mt-2">
+                        <small class="text-muted">And {{ overdue_bookings|length - 5 }} more...</small>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Maintenance Reminders -->
+    {% if maintenance_reminders %}
+    <div class="col-md-6 mb-4">
+        <div class="card border-warning">
+            <div class="card-header bg-warning text-dark d-flex align-items-center">
+                <i class="fas fa-tools me-2"></i>
+                <h6 class="mb-0">Upcoming Maintenance ({{ maintenance_reminders|length }})</h6>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    {% for reminder in maintenance_reminders[:5] %}
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="mb-1">{{ reminder.equipment_name }}</h6>
+                                <p class="mb-1 small text-muted">{{ reminder.description }}</p>
+                            </div>
+                            <small class="text-warning fw-bold">
+                                {{ reminder.maintenance_date.strftime('%b %d') if reminder.maintenance_date else 'N/A' }}
+                            </small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if maintenance_reminders|length > 5 %}
+                <div class="text-center mt-2">
+                    <small class="text-muted">And {{ maintenance_reminders|length - 5 }} more...</small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+function markAsRead(notificationId) {
+    fetch(`/notifications/mark_read/${notificationId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update the notification item
+            const notification = document.getElementById(`notification-${notificationId}`);
+            const unreadNotification = document.getElementById(`unread-notification-${notificationId}`);
+
+            if (notification) {
+                notification.classList.remove('unread');
+                const badge = notification.querySelector('.badge');
+                const markReadBtn = notification.querySelector('button[onclick*="markAsRead"]');
+                if (badge) badge.remove();
+                if (markReadBtn) markReadBtn.remove();
+                const title = notification.querySelector('h6');
+                if (title) title.classList.remove('fw-bold');
+            }
+
+            if (unreadNotification) {
+                unreadNotification.remove();
+            }
+
+            updateUnreadCount();
+            updateTabBadges();
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function markAllAsRead() {
+    if (!confirm('Mark all notifications as read?')) return;
+
+    fetch('/notifications/mark_all_read', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function updateUnreadCount() {
+    fetch('/api/notifications/unread_count')
+        .then(response => response.json())
+        .then(data => {
+            // Update navbar badge if exists
+            const navbarBadge = document.querySelector('.navbar .badge');
+            if (navbarBadge) {
+                if (data.count > 0) {
+                    navbarBadge.textContent = data.count;
+                    navbarBadge.style.display = 'inline-block';
+                } else {
+                    navbarBadge.style.display = 'none';
+                }
+            }
+        })
+        .catch(error => console.error('Error updating unread count:', error));
+}
+
+function updateTabBadges() {
+    // Update tab badges based on remaining unread notifications
+    const unreadItems = document.querySelectorAll('.notification-item.unread');
+    const unreadCount = unreadItems.length;
+
+    const unreadTabBadge = document.querySelector('#unread-tab .badge');
+    if (unreadTabBadge) {
+        if (unreadCount > 0) {
+            unreadTabBadge.textContent = unreadCount;
+        } else {
+            unreadTabBadge.remove();
+        }
+    }
+
+    const allTabBadge = document.querySelector('#all-tab .badge');
+    if (allTabBadge) {
+        if (unreadCount > 0) {
+            allTabBadge.textContent = unreadCount;
+        } else {
+            allTabBadge.remove();
+        }
+    }
+}
+
+// Auto-refresh notifications every 30 seconds
+setInterval(function() {
+    if (!document.hidden) {
+        updateUnreadCount();
+    }
+}, 30000);
+
+// Initialize tooltips
+document.addEventListener('DOMContentLoaded', function() {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>
+{% endblock %}

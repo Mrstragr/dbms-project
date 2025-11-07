@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}All Bookings - Admin{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex align-items-center justify-content-between">
+            <h3 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>All Bookings</h3>
+            <div class="input-group" style="max-width: 300px;">
+                <span class="input-group-text bg-transparent text-muted"><i class="fas fa-search"></i></span>
+                <input type="text" id="searchInput" class="form-control" placeholder="Search bookings..." oninput="filterBookings()">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="btn-group" role="group">
+            <button class="btn btn-outline-primary btn-sm" onclick="filterByStatus('all')">All</button>
+            <button class="btn btn-outline-primary btn-sm" onclick="filterByStatus('active')">Active</button>
+            <button class="btn btn-outline-primary btn-sm" onclick="filterByStatus('returned')">Returned</button>
+            <button class="btn btn-outline-primary btn-sm" onclick="filterByStatus('cancelled')">Cancelled</button>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Booking Records</h5>
+                    <span class="badge bg-primary">{{ bookings|length }} total</span>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if bookings %}
+                <div class="table-responsive">
+                    <table class="table table-hover" id="bookingsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User</th>
+                                <th>Equipment</th>
+                                <th>Type</th>
+                                <th>Booking Date</th>
+                                <th>Return Date</th>
+                                <th>Status</th>
+                                <th>Days Left/Overdue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in bookings %}
+                            <tr data-status="{{ booking.status|lower }}" 
+                                data-username="{{ booking.username|lower }}"
+                                data-equipment="{{ booking.equipment_name|lower }}">
+                                <td>{{ booking.booking_id }}</td>
+                                <td>
+                                    <strong>{{ booking.username }}</strong><br>
+                                    <small class="text-muted">{{ booking.email }}</small><br>
+                                    <span class="badge bg-secondary">{{ booking.role.replace('_', ' ').title() }}</span>
+                                </td>
+                                <td>
+                                    <strong>{{ booking.equipment_name }}</strong><br>
+                                    <small class="text-muted">{{ booking.location }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ booking.equipment_type.replace('_', ' ').title() }}</span>
+                                </td>
+                                <td>
+                                    {{ booking.booking_date.strftime('%Y-%m-%d') if booking.booking_date else 'N/A' }}<br>
+                                    <small class="text-muted">{{ booking.booking_date.strftime('%H:%M') if booking.booking_date else '' }}</small>
+                                </td>
+                                <td>
+                                    {{ booking.return_date.strftime('%Y-%m-%d') if booking.return_date else 'N/A' }}<br>
+                                    {% if booking.actual_return_date %}
+                                    <small class="text-success">Returned: {{ booking.actual_return_date.strftime('%Y-%m-%d') }}</small>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if booking.status == 'active' %}
+                                        <span class="badge bg-primary">Active</span>
+                                    {% elif booking.status == 'returned' %}
+                                        <span class="badge bg-success">Returned</span>
+                                    {% elif booking.status == 'cancelled' %}
+                                        <span class="badge bg-secondary">Cancelled</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ booking.status.title() }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if booking.status == 'active' and booking.return_date %}
+                                        {% set days_diff = ((booking.return_date - datetime.now()).days) %}
+                                        {% if days_diff < 0 %}
+                                            <span class="badge bg-danger">{{ -days_diff }} days overdue</span>
+                                        {% elif days_diff <= 3 %}
+                                            <span class="badge bg-warning">{{ days_diff }} days left</span>
+                                        {% else %}
+                                            <span class="badge bg-success">{{ days_diff }} days left</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>No bookings found.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function filterBookings() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById('bookingsTable');
+    const tr = table.getElementsByTagName('tr');
+    
+    for (let i = 1; i < tr.length; i++) {
+        const username = tr[i].getAttribute('data-username') || '';
+        const equipment = tr[i].getAttribute('data-equipment') || '';
+        
+        if (username.includes(filter) || equipment.includes(filter)) {
+            tr[i].style.display = '';
+        } else {
+            tr[i].style.display = 'none';
+        }
+    }
+}
+
+function filterByStatus(status) {
+    const table = document.getElementById('bookingsTable');
+    const tr = table.getElementsByTagName('tr');
+    
+    for (let i = 1; i < tr.length; i++) {
+        const bookingStatus = tr[i].getAttribute('data-status') || '';
+        
+        if (status === 'all' || bookingStatus === status) {
+            tr[i].style.display = '';
+        } else {
+            tr[i].style.display = 'none';
+        }
+    }
+}
+</script>
+{% endblock %}
+

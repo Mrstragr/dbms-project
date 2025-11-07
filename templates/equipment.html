@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}Equipment - SAU Lab Management{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+            <div>
+                <h2 class="mb-3 mb-md-0"><i class="fas fa-laptop me-2"></i>Equipment Catalog</h2>
+                <small class="text-muted">Browse and book laboratory equipment</small>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent text-muted"><i class="fas fa-search"></i></span>
+                    <input id="searchInput" type="text" class="form-control" placeholder="Search by name or type" oninput="searchEquipment()">
+                </div>
+                <div class="btn-group" role="group" aria-label="Filter by status">
+                    <button class="btn btn-outline-primary btn-sm active" onclick="filterByStatus('all')">All</button>
+                    <button class="btn btn-outline-success btn-sm" onclick="filterByStatus('available')">Available</button>
+                    <button class="btn btn-outline-warning btn-sm" onclick="filterByStatus('booked')">Booked</button>
+                    <button class="btn btn-outline-danger btn-sm" onclick="filterByStatus('maintenance')">Maintenance</button>
+                </div>
+                {% if current_user.role == 'admin' %}
+                <a href="{{ url_for('add_equipment') }}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus me-1"></i>Add Equipment
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Equipment Statistics -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body text-center">
+                <h4 class="text-primary">{{ equipment|length }}</h4>
+                <small class="text-muted">Total Equipment</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body text-center">
+                <h4 class="text-success">{{ equipment|selectattr('status', 'equalto', 'available')|list|length }}</h4>
+                <small class="text-muted">Available Now</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body text-center">
+                <h4 class="text-warning">{{ equipment|selectattr('status', 'equalto', 'booked')|list|length }}</h4>
+                <small class="text-muted">Currently Booked</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body text-center">
+                <h4 class="text-danger">{{ equipment|selectattr('status', 'equalto', 'maintenance')|list|length }}</h4>
+                <small class="text-muted">Under Maintenance</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Equipment Grid -->
+<div class="row" id="equipmentGrid">
+    {% for equipment in equipment %}
+    <div class="col-md-6 col-lg-4 mb-4 equipment-item" data-status="{{ equipment.status }}" data-name="{{ equipment.equipment_name }}" data-type="{{ equipment.equipment_type }}">
+        <div class="card h-100 equipment-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">{{ equipment.equipment_name }}</h6>
+                {% if equipment.status == 'available' %}
+                    <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>Available</span>
+                {% elif equipment.status == 'booked' %}
+                    <span class="badge bg-warning"><i class="fas fa-clock me-1"></i>Booked</span>
+                {% elif equipment.status == 'maintenance' %}
+                    <span class="badge bg-danger"><i class="fas fa-tools me-1"></i>Maintenance</span>
+                {% else %}
+                    <span class="badge bg-secondary">{{ equipment.status.title() }}</span>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <div class="mb-2">
+                    <span class="badge bg-light text-dark me-2">
+                        <i class="fas fa-tag me-1"></i>{{ equipment.equipment_type.title() }}
+                    </span>
+                    {% if equipment.location %}
+                    <span class="badge bg-info">
+                        <i class="fas fa-map-marker-alt me-1"></i>{{ equipment.location }}
+                    </span>
+                    {% endif %}
+                </div>
+
+                {% if equipment.description %}
+                <p class="card-text small text-muted mb-3">{{ equipment.description }}</p>
+                {% endif %}
+
+                <!-- Equipment Features (if available) -->
+                <div class="equipment-features mb-3">
+                    {% if equipment.equipment_type == 'laptop' %}
+                        <small class="text-muted d-block"><i class="fas fa-microchip me-1"></i>High-performance computing</small>
+                        <small class="text-muted d-block"><i class="fas fa-battery-half me-1"></i>Portable workstation</small>
+                    {% elif equipment.equipment_type == 'projector' %}
+                        <small class="text-muted d-block"><i class="fas fa-video me-1"></i>High-definition display</small>
+                        <small class="text-muted d-block"><i class="fas fa-volume-up me-1"></i>Audio capabilities</small>
+                    {% elif equipment.equipment_type == 'oscilloscope' %}
+                        <small class="text-muted d-block"><i class="fas fa-wave-square me-1"></i>Signal analysis</small>
+                        <small class="text-muted d-block"><i class="fas fa-tachometer-alt me-1"></i>Precision measurement</small>
+                    {% elif equipment.equipment_type == 'microscope' %}
+                        <small class="text-muted d-block"><i class="fas fa-search me-1"></i>High magnification</small>
+                        <small class="text-muted d-block"><i class="fas fa-lightbulb me-1"></i>LED illumination</small>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row g-1">
+                    <div class="col-6">
+                        <a href="{{ url_for('equipment_details', equipment_id=equipment.equipment_id) }}"
+                           class="btn btn-outline-info btn-sm w-100">
+                            <i class="fas fa-eye me-1"></i>Details
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        {% if equipment.status == 'available' %}
+                        <a href="{{ url_for('book_equipment', equipment_id=equipment.equipment_id) }}"
+                           class="btn btn-primary btn-sm w-100"
+                           onclick="return confirm('Book {{ equipment.equipment_name }} for 7 days?')">
+                            <i class="fas fa-calendar-plus me-1"></i>Book Now
+                        </a>
+                        {% elif equipment.status == 'booked' %}
+                        <button class="btn btn-warning btn-sm w-100" disabled>
+                            <i class="fas fa-clock me-1"></i>In Use
+                        </button>
+                        {% else %}
+                        <button class="btn btn-secondary btn-sm w-100" disabled>
+                            <i class="fas fa-tools me-1"></i>Unavailable
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if current_user.role == 'admin' %}
+                <div class="row g-1 mt-2">
+                    <div class="col-6">
+                        <a href="{{ url_for('edit_equipment', equipment_id=equipment.equipment_id) }}"
+                           class="btn btn-outline-warning btn-sm w-100">
+                            <i class="fas fa-edit me-1"></i>Edit
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <form method="POST" action="{{ url_for('delete_equipment', equipment_id=equipment.equipment_id) }}"
+                              onsubmit="return confirm('Delete {{ equipment.equipment_name }}?')" class="d-inline">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                                <i class="fas fa-trash me-1"></i>Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if not equipment %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-laptop fa-4x text-muted mb-3"></i>
+                <h5 class="text-muted">No Equipment Found</h5>
+                <p class="text-muted">No equipment matches your current search criteria.</p>
+                <button class="btn btn-primary" onclick="resetFilters()">
+                    <i class="fas fa-undo me-1"></i>Reset Filters
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Quick Booking Modal -->
+<div class="modal fade" id="quickBookModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Quick Book Equipment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Book <strong id="equipmentName"></strong> for the next 7 days?</p>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Return date will be calculated automatically. You can return equipment early if needed.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="#" id="confirmBookBtn" class="btn btn-primary">Confirm Booking</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentFilter = 'all';
+
+function searchEquipment() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const equipmentItems = document.querySelectorAll('.equipment-item');
+
+    equipmentItems.forEach(item => {
+        const name = item.dataset.name.toLowerCase();
+        const type = item.dataset.type.toLowerCase();
+        const visible = (name.includes(searchTerm) || type.includes(searchTerm)) &&
+                       (currentFilter === 'all' || item.dataset.status === currentFilter);
+        item.style.display = visible ? 'block' : 'none';
+    });
+}
+
+function filterByStatus(status) {
+    currentFilter = status;
+    const buttons = document.querySelectorAll('.btn-group .btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    searchEquipment();
+}
+
+function resetFilters() {
+    document.getElementById('searchInput').value = '';
+    currentFilter = 'all';
+    const buttons = document.querySelectorAll('.btn-group .btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    buttons[0].classList.add('active');
+    searchEquipment();
+}
+
+function quickBook(equipmentId, equipmentName) {
+    document.getElementById('equipmentName').textContent = equipmentName;
+    document.getElementById('confirmBookBtn').href = `/book_equipment/${equipmentId}`;
+    new bootstrap.Modal(document.getElementById('quickBookModal')).show();
+}
+
+// Initialize tooltips
+document.addEventListener('DOMContentLoaded', function() {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>
+{% endblock %}

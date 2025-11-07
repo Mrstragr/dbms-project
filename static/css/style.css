@@ -1,0 +1,113 @@
+/* SAU Labs - Professional Admin Theme */
+
+:root {
+	--bg: #0b1020;
+	--panel: #121833;
+	--panel-2: #172048;
+	--brand: #4f7cff;
+	--brand-2: #7aa2ff;
+	--text: #e7ecff;
+	--muted: #9aa6c6;
+	--success: #2ecc71;
+	--warning: #f1c40f;
+	--danger: #e74c3c;
+	--border: #25315c;
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	background: var(--bg);
+	color: var(--text);
+	font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+.app-shell { display: flex; min-height: 100vh; }
+
+/* Sidebar */
+.sidebar {
+	width: 250px;
+	background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+	border-right: 1px solid var(--border);
+	position: sticky;
+	top: 0;
+	height: 100vh;
+	padding: 1rem 0;
+}
+
+.sidebar-brand { padding: 0 1rem 1rem; border-bottom: 1px solid var(--border); margin-bottom: .75rem; }
+.brand-link { color: var(--text); text-decoration: none; font-weight: 700; letter-spacing: .3px; }
+.brand-link i { color: var(--brand); }
+
+.sidebar-nav { display: flex; flex-direction: column; gap: .25rem; padding: 0 .5rem; }
+.sidebar-section { color: var(--muted); font-size: .75rem; text-transform: uppercase; padding: .75rem 1rem .25rem; }
+.sidebar-link {
+	color: var(--text);
+	padding: .6rem .85rem;
+	border-radius: .5rem;
+	text-decoration: none;
+	display: flex; align-items: center;
+}
+.sidebar-link:hover { background: rgba(79,124,255,.08); color: var(--brand-2); }
+
+/* Main */
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.topbar {
+	height: 56px; display: flex; align-items: center; justify-content: space-between;
+	padding: 0 1rem; border-bottom: 1px solid var(--border); background: var(--panel);
+}
+.content { padding: 1.25rem; }
+.footer { border-top: 1px solid var(--border); padding: .75rem 1rem; background: var(--panel); }
+
+/* Cards */
+.card { background: var(--panel); color: var(--text); border: 1px solid var(--border); transition: transform .15s ease, box-shadow .15s ease; }
+.card:hover { box-shadow: 0 12px 24px rgba(0,0,0,.25); transform: translateY(-2px); }
+
+/* Tables */
+.table { color: var(--text); }
+.table th { border-top: none; font-weight: 600; color: var(--muted); }
+.table tr { border-color: var(--border); }
+.table .badge { font-weight: 600; }
+
+/* Buttons */
+.btn { border-radius: .5rem; }
+.btn-primary { background: var(--brand); border-color: var(--brand); }
+.btn-outline-primary { color: var(--brand-2); border-color: var(--brand-2); }
+.btn-outline-primary:hover { background: var(--brand-2); border-color: var(--brand-2); color: #0b1020; }
+
+/* Alerts */
+.alert { border-radius: .5rem; }
+
+/* Badges */
+.badge { font-size: .75em; }
+
+/* Lists */
+.list-group-item {
+	background: var(--panel-2);
+	color: var(--text);
+	border: 1px solid var(--border);
+	border-radius: .5rem;
+	margin-bottom: .25rem;
+}
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn .5s ease-in-out; }
+
+/* Status colors */
+.status-available { color: var(--success); }
+.status-booked { color: var(--warning); }
+.status-maintenance { color: var(--danger); }
+
+/* Forms */
+.form-control, .form-select { background: var(--panel-2); color: var(--text); border-color: var(--border); }
+.form-control:focus, .form-select:focus { box-shadow: 0 0 0 .2rem rgba(79,124,255,.2); border-color: var(--brand); }
+
+/* Responsive */
+@media (max-width: 992px) {
+	.sidebar { position: fixed; left: -260px; transition: left .2s ease; z-index: 1030; }
+	.sidebar.open { left: 0; }
+	.main { margin-left: 0; }
+}

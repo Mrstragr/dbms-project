@@ -8,7 +8,7 @@ This system efficiently manages laboratory equipment (laptops, projectors, oscil
 
 ## 👥 Team Structure
 
-- **Ansh** - DB Designer (ER Diagram, Schema Design, Normalization)
+- **Ansh** - DB Designer (ER Diagram, Schema Design, Normalization) and Backend Design
 - **Amar** - DB Administrator (Database Setup, Security, Backup)
 - **Nikhil** - Application Developer (Flask App, Frontend Integration)
 - **Prakash** - Query & Optimization Specialist (SQL Queries, Performance)

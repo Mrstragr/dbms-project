@@ -44,11 +44,11 @@
 
                 <!-- Role-specific navigation -->
                 {% if current_user.role == 'student' %}
-                <a class="sidebar-link" href="{{ url_for('student_resources') }}">
+                <a class="sidebar-link" href="{{ url_for('student_dashboard') }}">
                     <i class="fas fa-book me-2"></i>Resources
                 </a>
                 {% elif current_user.role == 'faculty' %}
-                <a class="sidebar-link" href="{{ url_for('faculty_reports') }}">
+                <a class="sidebar-link" href="{{ url_for('faculty_dashboard') }}">
                     <i class="fas fa-chart-bar me-2"></i>Reports
                 </a>
                 {% elif current_user.role == 'admin' %}
@@ -56,7 +56,7 @@
                 <a class="sidebar-link" href="{{ url_for('admin_dashboard') }}">
                     <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                 </a>
-                <a class="sidebar-link" href="{{ url_for('admin_analytics') }}">
+                <a class="sidebar-link" href="{{ url_for('admin_dashboard') }}">
                     <i class="fas fa-chart-pie me-2"></i>Analytics
                 </a>
                 <a class="sidebar-link" href="{{ url_for('admin_equipment') }}">

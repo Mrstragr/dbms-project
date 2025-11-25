@@ -1418,4 +1418,4 @@ def remove_limitation(limitation_id):
     return redirect(request.referrer or url_for('admin_users'))
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True, host='0.0.0.0', port=5001)

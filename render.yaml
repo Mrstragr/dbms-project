@@ -6,7 +6,7 @@ services:
     branch: deployment-ready
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
-    healthCheckPath: /
+    healthCheckPath: /health/db
     envVars:
       - key: SECRET_KEY
         sync: false

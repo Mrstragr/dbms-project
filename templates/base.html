@@ -17,86 +17,91 @@
 <body>
     <div class="app-shell">
         <!-- Sidebar -->
-        <aside id="sidebar" class="sidebar">
+        <aside id="sidebar" class="sidebar" aria-label="Main navigation">
             <div class="sidebar-brand">
                 <a href="{{ url_for('index') }}" class="brand-link">
-                    <i class="fas fa-flask me-2"></i>
-                    <span>SAU Labs</span>
+                    <span class="brand-icon"><i class="fas fa-flask"></i></span>
+                    <span class="brand-text">SAU Lab Resource Management</span>
                 </a>
             </div>
             <nav class="sidebar-nav">
+                {% if current_user.is_authenticated %}<div class="sidebar-section">Menu</div>{% endif %}
                 {% if current_user.is_authenticated %}
-                <a class="sidebar-link" href="{{ url_for('dashboard') }}">
+                <a class="sidebar-link{{ ' active' if request.endpoint == 'dashboard' }}" href="{{ url_for('dashboard') }}">
                     <i class="fas fa-gauge-high me-2"></i>Dashboard
                 </a>
-                <a class="sidebar-link" href="{{ url_for('equipment_list') }}">
+                <a class="sidebar-link{{ ' active' if request.endpoint == 'equipment_list' }}" href="{{ url_for('equipment_list') }}">
                     <i class="fas fa-laptop me-2"></i>Equipment
                 </a>
-                <a class="sidebar-link" href="{{ url_for('maintenance') }}">
+                <a class="sidebar-link{{ ' active' if request.endpoint == 'maintenance' }}" href="{{ url_for('maintenance') }}">
                     <i class="fas fa-screwdriver-wrench me-2"></i>Maintenance
                 </a>
-                <a class="sidebar-link" href="{{ url_for('notifications') }}">
+                <a class="sidebar-link{{ ' active' if request.endpoint == 'notifications' }}" href="{{ url_for('notifications') }}">
                     <i class="fas fa-bell me-2"></i>Notifications
                 </a>
-                <a class="sidebar-link" href="{{ url_for('profile') }}">
+                <a class="sidebar-link{{ ' active' if request.endpoint == 'profile' }}" href="{{ url_for('profile') }}">
                     <i class="fas fa-user me-2"></i>My Profile
                 </a>
 
                 <!-- Role-specific navigation -->
                 {% if current_user.role == 'student' %}
-                <a class="sidebar-link" href="{{ url_for('student_dashboard') }}">
+                <a class="sidebar-link{{ ' active' if request.endpoint == 'student_dashboard' }}" href="{{ url_for('student_dashboard') }}">
                     <i class="fas fa-book me-2"></i>Resources
                 </a>
                 {% elif current_user.role == 'faculty' %}
-                <a class="sidebar-link" href="{{ url_for('faculty_dashboard') }}">
+                <a class="sidebar-link{{ ' active' if request.endpoint == 'faculty_dashboard' }}" href="{{ url_for('faculty_dashboard') }}">
                     <i class="fas fa-chart-bar me-2"></i>Reports
                 </a>
                 {% elif current_user.role == 'admin' %}
                 <div class="sidebar-section">Admin</div>
-                <a class="sidebar-link" href="{{ url_for('admin_dashboard') }}">
+                <a class="sidebar-link{{ ' active' if request.endpoint == 'admin_dashboard' }}" href="{{ url_for('admin_dashboard') }}">
                     <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                 </a>
                 <a class="sidebar-link" href="{{ url_for('admin_dashboard') }}">
                     <i class="fas fa-chart-pie me-2"></i>Analytics
                 </a>
-                <a class="sidebar-link" href="{{ url_for('admin_equipment') }}">
+                <a class="sidebar-link{{ ' active' if request.endpoint == 'admin_equipment' }}" href="{{ url_for('admin_equipment') }}">
                     <i class="fas fa-gear me-2"></i>Manage Equipment
                 </a>
-                <a class="sidebar-link" href="{{ url_for('add_equipment') }}">
+                <a class="sidebar-link{{ ' active' if request.endpoint == 'add_equipment' }}" href="{{ url_for('add_equipment') }}">
                     <i class="fas fa-plus me-2"></i>Add Equipment
                 </a>
-                <a class="sidebar-link" href="{{ url_for('admin_users') }}">
+                <a class="sidebar-link{{ ' active' if request.endpoint == 'admin_users' }}" href="{{ url_for('admin_users') }}">
                     <i class="fas fa-users me-2"></i>Manage Users
                 </a>
-                <a class="sidebar-link" href="{{ url_for('admin_bookings') }}">
+                <a class="sidebar-link{{ ' active' if request.endpoint == 'admin_bookings' }}" href="{{ url_for('admin_bookings') }}">
                     <i class="fas fa-calendar-alt me-2"></i>All Bookings
                 </a>
                 {% endif %}
                 {% else %}
-                <a class="sidebar-link" href="{{ url_for('login') }}">
+                <a class="sidebar-link{{ ' active' if request.endpoint == 'login' }}" href="{{ url_for('login') }}">
                     <i class="fas fa-right-to-bracket me-2"></i>Login
                 </a>
-                <a class="sidebar-link" href="{{ url_for('signup') }}">
+                <a class="sidebar-link{{ ' active' if request.endpoint == 'signup' }}" href="{{ url_for('signup') }}">
                     <i class="fas fa-user-plus me-2"></i>Sign Up
                 </a>
                 {% endif %}
             </nav>
         </aside>
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
         <!-- Main area -->
         <div class="main">
             <!-- Topbar -->
             <header class="topbar">
                 <div class="topbar-left">
-                    <button class="btn btn-sm btn-outline-secondary d-lg-none" id="sidebarToggle">
+                    <button class="btn btn-sm btn-outline-secondary d-lg-none" id="sidebarToggle" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-bars"></i>
                     </button>
+                    <a href="{{ url_for('index') }}" class="topbar-brand d-lg-none">
+                        <i class="fas fa-flask me-1"></i>SAU Lab Resource Management
+                    </a>
                 </div>
                 <div class="topbar-right">
                     {% if current_user.is_authenticated %}
                     <div class="dropdown">
-                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="fas fa-user me-1"></i>{{ current_user.username }}
+                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle user-menu-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-circle-user me-1"></i><span class="d-none d-sm-inline">{{ current_user.username }}</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li class="dropdown-item-text small text-muted">{{ current_user.email }}</li>
@@ -147,9 +152,17 @@
     <script>
         const sidebar = document.getElementById('sidebar');
         const toggle = document.getElementById('sidebarToggle');
+        const backdrop = document.getElementById('sidebarBackdrop');
+        const setSidebar = (open) => {
+            sidebar.classList.toggle('open', open);
+            if (backdrop) backdrop.classList.toggle('show', open);
+            if (toggle) toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        };
         if (toggle) {
-            toggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+            toggle.addEventListener('click', () => setSidebar(!sidebar.classList.contains('open')));
         }
+        if (backdrop) backdrop.addEventListener('click', () => setSidebar(false));
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setSidebar(false); });
     </script>
     {% block scripts %}{% endblock %}
 </body>

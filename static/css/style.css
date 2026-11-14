@@ -117,8 +117,18 @@ small, .small { font-size: 0.85em; }
 	height: 56px; display: flex; align-items: center; justify-content: space-between;
 	padding: 0 1rem; border-bottom: 1px solid var(--border); background: var(--panel);
 }
-.content { padding: 1.25rem; }
-.footer { border-top: 1px solid var(--border); padding: .75rem 1rem; background: var(--panel); }
+.content { flex: 1 0 auto; padding: var(--space-4) var(--space-4) var(--space-5); }
+.page-container { width: 100%; max-width: 1320px; margin: 0 auto; }
+.flash-container { padding: var(--space-3) var(--space-4) 0; }
+.flash-container .alert { margin-bottom: var(--space-2); }
+.footer { flex-shrink: 0; border-top: 1px solid var(--border); padding: var(--space-3) var(--space-4); background: var(--panel); }
+.footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-2) var(--space-4); }
+.footer i { color: var(--primary); }
+@media (max-width: 576px) {
+	.content { padding: var(--space-3) var(--space-3) var(--space-4); }
+	.flash-container { padding: var(--space-3) var(--space-3) 0; }
+	.footer-inner { flex-direction: column; text-align: center; }
+}
 
 /* Cards */
 .card { background: var(--panel); color: var(--text); border: 1px solid var(--border); transition: transform .15s ease, box-shadow .15s ease; border-radius: 0.5rem; }

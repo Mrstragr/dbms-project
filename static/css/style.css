@@ -466,3 +466,18 @@ small, .small { font-size: 0.85em; }
 .section-card > .card-header { background: var(--panel-2); border-bottom: 1px solid var(--border); }
 .section-card > .card-header h5 i, .section-card > .card-header h6 i { color: var(--primary); }
 .card canvas { max-width: 100%; height: auto !important; }
+
+/* Status badges: available=green, booked=yellow, maintenance=red, overdue=dark red */
+.status-badge { font-weight: 600; padding: .4em .7em; border-radius: 999px; letter-spacing: .2px; }
+.badge.status-available { background: #198754; color: #fff; }
+.badge.status-booked { background: #ffc107; color: #3d2e00; }
+.badge.status-maintenance { background: #dc3545; color: #fff; }
+.badge.status-overdue { background: #842029; color: #fff; }
+.badge.status-other { background: #6c757d; color: #fff; }
+
+/* Equipment catalog / details */
+.equipment-card .card-header { background: var(--panel-2); }
+.equipment-card .card-footer { background: var(--panel-2); border-top: 1px solid var(--border); }
+.equipment-search { min-width: 220px; flex: 1 1 220px; }
+.detail-label { color: var(--muted); }
+.detail-label strong { font-weight: 600; }

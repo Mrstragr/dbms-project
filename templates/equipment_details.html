@@ -5,7 +5,7 @@
 {% block content %}
 <div class="row mb-4">
     <div class="col-12">
-        <div class="d-flex align-items-center justify-content-between">
+        <div class="page-header mb-0">
             <div>
                 <h3 class="mb-0"><i class="fas fa-laptop me-2"></i>{{ equipment.equipment_name }}</h3>
                 <small class="text-muted">Equipment ID: {{ equipment.equipment_id }}</small>
@@ -19,50 +19,50 @@
 
 <div class="row">
     <!-- Equipment Information -->
-    <div class="col-md-8">
+    <div class="col-lg-8">
         <div class="card mb-4">
             <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Equipment Information</h5>
             </div>
             <div class="card-body">
                 <div class="row mb-3">
-                    <div class="col-sm-4"><strong>Equipment Name:</strong></div>
+                    <div class="col-sm-4 detail-label"><strong>Equipment Name:</strong></div>
                     <div class="col-sm-8">{{ equipment.equipment_name }}</div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-sm-4"><strong>Type:</strong></div>
+                    <div class="col-sm-4 detail-label"><strong>Type:</strong></div>
                     <div class="col-sm-8">
                         <span class="badge bg-primary">{{ equipment.equipment_type.replace('_', ' ').title() }}</span>
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-sm-4"><strong>Location:</strong></div>
+                    <div class="col-sm-4 detail-label"><strong>Location:</strong></div>
                     <div class="col-sm-8">
                         <i class="fas fa-map-marker-alt me-1"></i>{{ equipment.location }}
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-sm-4"><strong>Status:</strong></div>
+                    <div class="col-sm-4 detail-label"><strong>Status:</strong></div>
                     <div class="col-sm-8">
                         {% if equipment.status == 'available' %}
-                            <span class="badge bg-success">Available</span>
+                            <span class="badge status-badge status-available"><i class="fas fa-check-circle me-1"></i>Available</span>
                         {% elif equipment.status == 'booked' %}
-                            <span class="badge bg-warning">Booked</span>
+                            <span class="badge status-badge status-booked"><i class="fas fa-clock me-1"></i>Booked</span>
                         {% elif equipment.status == 'maintenance' %}
-                            <span class="badge bg-danger">Under Maintenance</span>
+                            <span class="badge status-badge status-maintenance"><i class="fas fa-tools me-1"></i>Under Maintenance</span>
                         {% else %}
-                            <span class="badge bg-secondary">{{ equipment.status.title() }}</span>
+                            <span class="badge status-badge status-other">{{ equipment.status.title() }}</span>
                         {% endif %}
                     </div>
                 </div>
                 {% if equipment.description %}
                 <div class="row mb-3">
-                    <div class="col-sm-4"><strong>Description:</strong></div>
+                    <div class="col-sm-4 detail-label"><strong>Description:</strong></div>
                     <div class="col-sm-8">{{ equipment.description }}</div>
                 </div>
                 {% endif %}
                 <div class="row mb-3">
-                    <div class="col-sm-4"><strong>Created:</strong></div>
+                    <div class="col-sm-4 detail-label"><strong>Created:</strong></div>
                     <div class="col-sm-8">{{ equipment.created_at.strftime('%B %d, %Y') if equipment.created_at else 'N/A' }}</div>
                 </div>
                 {% if equipment.status == 'available' %}
@@ -78,28 +78,31 @@
         </div>
 
         <!-- Statistics -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h3 class="text-primary">{{ stats.total_bookings or 0 }}</h3>
-                        <p class="text-muted mb-0">Total Bookings</p>
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-sm-4">
+                <div class="stat-tile stat-primary">
+                    <div class="stat-tile-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <div class="stat-tile-body">
+                        <div class="stat-tile-value">{{ stats.total_bookings or 0 }}</div>
+                        <div class="stat-tile-label">Total Bookings</div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h3 class="text-warning">{{ stats.active_bookings or 0 }}</h3>
-                        <p class="text-muted mb-0">Active Bookings</p>
+            <div class="col-12 col-sm-4">
+                <div class="stat-tile stat-warning">
+                    <div class="stat-tile-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-tile-body">
+                        <div class="stat-tile-value">{{ stats.active_bookings or 0 }}</div>
+                        <div class="stat-tile-label">Active Bookings</div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h3 class="text-success">{{ stats.returned_bookings or 0 }}</h3>
-                        <p class="text-muted mb-0">Returned</p>
+            <div class="col-12 col-sm-4">
+                <div class="stat-tile stat-success">
+                    <div class="stat-tile-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-tile-body">
+                        <div class="stat-tile-value">{{ stats.returned_bookings or 0 }}</div>
+                        <div class="stat-tile-label">Returned</div>
                     </div>
                 </div>
             </div>
@@ -193,7 +196,7 @@
     </div>
 
     <!-- Quick Actions -->
-    <div class="col-md-4">
+    <div class="col-lg-4">
         <div class="card mb-4">
             <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>

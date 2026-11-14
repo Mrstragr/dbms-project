@@ -162,7 +162,7 @@
                                     {% if booking.return_date %}
                                         {{ booking.return_date.strftime('%b %d, %Y') }}
                                         {% if booking.status == 'active' and booking.return_date < datetime.now() %}
-                                            <br><small class="text-danger">Overdue</small>
+                                            <br><span class="badge status-badge status-overdue mt-1"><i class="fas fa-exclamation-circle me-1"></i>Overdue</span>
                                         {% endif %}
                                     {% else %}
                                         N/A
@@ -354,7 +354,7 @@
                                     {% if booking.return_date %}
                                         {{ booking.return_date.strftime('%b %d, %Y') }}
                                         {% if booking.status == 'active' and booking.return_date < datetime.now() %}
-                                            <br><small class="text-danger">Overdue</small>
+                                            <br><span class="badge status-badge status-overdue mt-1"><i class="fas fa-exclamation-circle me-1"></i>Overdue</span>
                                         {% endif %}
                                     {% else %}
                                         N/A

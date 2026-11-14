@@ -5,13 +5,13 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+        <div class="page-header">
             <div>
-                <h2 class="mb-3 mb-md-0"><i class="fas fa-laptop me-2"></i>Equipment Catalog</h2>
+                <h2 class="mb-1 mb-md-0"><i class="fas fa-laptop me-2"></i>Equipment Catalog</h2>
                 <small class="text-muted">Browse and book laboratory equipment</small>
             </div>
             <div class="d-flex gap-2 flex-wrap">
-                <div class="input-group">
+                <div class="input-group equipment-search">
                     <span class="input-group-text bg-transparent text-muted"><i class="fas fa-search"></i></span>
                     <input id="searchInput" type="text" class="form-control" placeholder="Search by name or type" oninput="searchEquipment()">
                 </div>
@@ -32,36 +32,40 @@
 </div>
 
 <!-- Equipment Statistics -->
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card stat-card">
-            <div class="card-body text-center">
-                <h4 class="text-primary">{{ equipment|length }}</h4>
-                <small class="text-muted">Total Equipment</small>
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile stat-primary">
+            <div class="stat-tile-icon"><i class="fas fa-laptop"></i></div>
+            <div class="stat-tile-body">
+                <div class="stat-tile-value">{{ equipment|length }}</div>
+                <div class="stat-tile-label">Total Equipment</div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card stat-card">
-            <div class="card-body text-center">
-                <h4 class="text-success">{{ equipment|selectattr('status', 'equalto', 'available')|list|length }}</h4>
-                <small class="text-muted">Available Now</small>
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile stat-success">
+            <div class="stat-tile-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="stat-tile-body">
+                <div class="stat-tile-value">{{ equipment|selectattr('status', 'equalto', 'available')|list|length }}</div>
+                <div class="stat-tile-label">Available Now</div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card stat-card">
-            <div class="card-body text-center">
-                <h4 class="text-warning">{{ equipment|selectattr('status', 'equalto', 'booked')|list|length }}</h4>
-                <small class="text-muted">Currently Booked</small>
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile stat-warning">
+            <div class="stat-tile-icon"><i class="fas fa-clock"></i></div>
+            <div class="stat-tile-body">
+                <div class="stat-tile-value">{{ equipment|selectattr('status', 'equalto', 'booked')|list|length }}</div>
+                <div class="stat-tile-label">Currently Booked</div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card stat-card">
-            <div class="card-body text-center">
-                <h4 class="text-danger">{{ equipment|selectattr('status', 'equalto', 'maintenance')|list|length }}</h4>
-                <small class="text-muted">Under Maintenance</small>
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile stat-danger">
+            <div class="stat-tile-icon"><i class="fas fa-tools"></i></div>
+            <div class="stat-tile-body">
+                <div class="stat-tile-value">{{ equipment|selectattr('status', 'equalto', 'maintenance')|list|length }}</div>
+                <div class="stat-tile-label">Under Maintenance</div>
             </div>
         </div>
     </div>
@@ -72,16 +76,16 @@
     {% for equipment in equipment %}
     <div class="col-md-6 col-lg-4 mb-4 equipment-item" data-status="{{ equipment.status }}" data-name="{{ equipment.equipment_name }}" data-type="{{ equipment.equipment_type }}">
         <div class="card h-100 equipment-card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h6 class="mb-0">{{ equipment.equipment_name }}</h6>
+            <div class="card-header d-flex justify-content-between align-items-center gap-2">
+                <h6 class="mb-0 text-truncate">{{ equipment.equipment_name }}</h6>
                 {% if equipment.status == 'available' %}
-                    <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>Available</span>
+                    <span class="badge status-badge status-available"><i class="fas fa-check-circle me-1"></i>Available</span>
                 {% elif equipment.status == 'booked' %}
-                    <span class="badge bg-warning"><i class="fas fa-clock me-1"></i>Booked</span>
+                    <span class="badge status-badge status-booked"><i class="fas fa-clock me-1"></i>Booked</span>
                 {% elif equipment.status == 'maintenance' %}
-                    <span class="badge bg-danger"><i class="fas fa-tools me-1"></i>Maintenance</span>
+                    <span class="badge status-badge status-maintenance"><i class="fas fa-tools me-1"></i>Maintenance</span>
                 {% else %}
-                    <span class="badge bg-secondary">{{ equipment.status.title() }}</span>
+                    <span class="badge status-badge status-other">{{ equipment.status.title() }}</span>
                 {% endif %}
             </div>
             <div class="card-body">
@@ -90,7 +94,7 @@
                         <i class="fas fa-tag me-1"></i>{{ equipment.equipment_type.title() }}
                     </span>
                     {% if equipment.location %}
-                    <span class="badge bg-info">
+                    <span class="badge bg-light text-dark">
                         <i class="fas fa-map-marker-alt me-1"></i>{{ equipment.location }}
                     </span>
                     {% endif %}

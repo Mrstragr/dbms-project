@@ -539,3 +539,19 @@ small, .small { font-size: 0.85em; }
 .activity-stat .fa-2x { font-size: 1.5rem; }
 .activity-stat .stat-label { font-size: .85rem; font-weight: 600; color: var(--muted); }
 .security-item { display: flex; align-items: center; }
+
+/* Empty states */
+.empty-state { text-align: center; padding: var(--space-5) var(--space-3); color: var(--muted); }
+.empty-state-compact { padding: var(--space-4) var(--space-3); }
+.empty-state-icon {
+	width: 4rem; height: 4rem; margin: 0 auto var(--space-3); border-radius: 50%;
+	display: flex; align-items: center; justify-content: center;
+	background: var(--panel); border: 1px dashed var(--border); color: var(--muted); font-size: 1.5rem;
+}
+.empty-state-compact .empty-state-icon { width: 3rem; height: 3rem; font-size: 1.15rem; }
+.empty-state-title { color: var(--text); font-weight: 600; margin-bottom: var(--space-1); }
+.empty-state-text { color: var(--muted); font-size: .875rem; max-width: 26rem; margin: 0 auto var(--space-3); }
+.empty-state-text:last-child { margin-bottom: 0; }
+.empty-state-success .empty-state-icon { background: rgba(25, 135, 84, .1); border-color: rgba(25, 135, 84, .35); color: var(--success); }
+.empty-state-warning .empty-state-icon { background: rgba(255, 193, 7, .15); border-color: rgba(255, 193, 7, .5); color: #b7791f; }
+.admin-table .empty-state { background: transparent; }

@@ -110,8 +110,10 @@
                     </table>
                 </div>
                 {% else %}
-                <div class="alert alert-info text-center">
-                    <i class="fas fa-info-circle me-2"></i>No bookings found.
+                <div class="empty-state">
+                    <div class="empty-state-icon"><i class="fas fa-calendar-times"></i></div>
+                    <h6 class="empty-state-title">No bookings yet</h6>
+                    <p class="empty-state-text">Bookings made by students and faculty will show up here.</p>
                 </div>
                 {% endif %}
             </div>

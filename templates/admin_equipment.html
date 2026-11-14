@@ -69,6 +69,19 @@
                                     </div>
                                 </td>
                             </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="6">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon"><i class="fas fa-box-open"></i></div>
+                                        <h6 class="empty-state-title">No equipment yet</h6>
+                                        <p class="empty-state-text">Add your first item to start tracking lab resources.</p>
+                                        <a href="{{ url_for('add_equipment') }}" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-plus me-1"></i>Add Equipment
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
                             {% endfor %}
                         </tbody>
                     </table>

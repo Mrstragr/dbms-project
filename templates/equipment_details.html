@@ -146,7 +146,11 @@
                     </table>
                 </div>
                 {% else %}
-                <p class="text-muted text-center">No booking history available.</p>
+                <div class="empty-state empty-state-compact">
+                    <div class="empty-state-icon"><i class="fas fa-calendar-times"></i></div>
+                    <h6 class="empty-state-title">No bookings yet</h6>
+                    <p class="empty-state-text">This equipment hasn't been booked so far.</p>
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -189,7 +193,11 @@
                     </table>
                 </div>
                 {% else %}
-                <p class="text-muted text-center">No maintenance history available.</p>
+                <div class="empty-state empty-state-compact">
+                    <div class="empty-state-icon"><i class="fas fa-wrench"></i></div>
+                    <h6 class="empty-state-title">No maintenance yet</h6>
+                    <p class="empty-state-text">Service records for this equipment will appear here.</p>
+                </div>
                 {% endif %}
             </div>
         </div>

@@ -73,8 +73,13 @@
                     </table>
                 </div>
                 {% else %}
-                <div class="alert alert-info text-center">
-                    <i class="fas fa-info-circle me-2"></i>No maintenance records found.
+                <div class="empty-state">
+                    <div class="empty-state-icon"><i class="fas fa-screwdriver-wrench"></i></div>
+                    <h6 class="empty-state-title">No maintenance records yet</h6>
+                    <p class="empty-state-text">Log repairs, calibration and routine service to keep track of equipment health.</p>
+                    <a href="{{ url_for('add_maintenance') }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus me-1"></i>Add Maintenance Record
+                    </a>
                 </div>
                 {% endif %}
             </div>

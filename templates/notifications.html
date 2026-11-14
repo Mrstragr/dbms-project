@@ -178,10 +178,10 @@
                             {% endfor %}
                         </div>
                         {% else %}
-                        <div class="text-center py-5">
-                            <i class="fas fa-bell-slash fa-4x text-muted mb-3"></i>
-                            <h5 class="text-muted">No Notifications</h5>
-                            <p class="text-muted">You're all caught up! New notifications will appear here.</p>
+                        <div class="empty-state">
+                            <div class="empty-state-icon"><i class="fas fa-bell-slash"></i></div>
+                            <h5 class="empty-state-title">No Notifications</h5>
+                            <p class="empty-state-text">You're all caught up! New notifications will appear here.</p>
                         </div>
                         {% endif %}
                     </div>
@@ -249,10 +249,10 @@
                             {% endfor %}
                         </div>
                         {% else %}
-                        <div class="text-center py-5">
-                            <i class="fas fa-check-circle fa-4x text-success mb-3"></i>
-                            <h5 class="text-success">All Caught Up!</h5>
-                            <p class="text-muted">You have no unread notifications.</p>
+                        <div class="empty-state empty-state-success">
+                            <div class="empty-state-icon"><i class="fas fa-check-circle"></i></div>
+                            <h5 class="empty-state-title">All Caught Up!</h5>
+                            <p class="empty-state-text">You have no unread notifications.</p>
                         </div>
                         {% endif %}
                     </div>
@@ -305,10 +305,10 @@
                             {% endfor %}
                         </div>
                         {% else %}
-                        <div class="text-center py-5">
-                            <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
-                            <h5 class="text-muted">No Booking Notifications</h5>
-                            <p class="text-muted">Your booking-related notifications will appear here.</p>
+                        <div class="empty-state">
+                            <div class="empty-state-icon"><i class="fas fa-calendar-times"></i></div>
+                            <h5 class="empty-state-title">No Booking Notifications</h5>
+                            <p class="empty-state-text">Your booking-related notifications will appear here.</p>
                         </div>
                         {% endif %}
                     </div>
@@ -361,10 +361,10 @@
                             {% endfor %}
                         </div>
                         {% else %}
-                        <div class="text-center py-5">
-                            <i class="fas fa-tools fa-4x text-muted mb-3"></i>
-                            <h5 class="text-muted">No Maintenance Notifications</h5>
-                            <p class="text-muted">Maintenance-related notifications will appear here.</p>
+                        <div class="empty-state">
+                            <div class="empty-state-icon"><i class="fas fa-tools"></i></div>
+                            <h5 class="empty-state-title">No Maintenance Notifications</h5>
+                            <p class="empty-state-text">Maintenance-related notifications will appear here.</p>
                         </div>
                         {% endif %}
                     </div>

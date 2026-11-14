@@ -5,9 +5,9 @@
 {% block content %}
 <div class="row mb-4">
     <div class="col-12">
-        <div class="d-flex align-items-center justify-content-between">
+        <div class="page-header mb-0">
             <h3 class="mb-0"><i class="fas fa-users me-2"></i>User Management</h3>
-            <div class="input-group" style="max-width: 300px;">
+            <div class="input-group table-search">
                 <span class="input-group-text bg-transparent text-muted"><i class="fas fa-search"></i></span>
                 <input type="text" id="searchInput" class="form-control" placeholder="Search users..." oninput="filterUsers()">
             </div>
@@ -27,8 +27,8 @@
             <div class="card-body">
                 {% if users %}
                 <div class="table-responsive">
-                    <table class="table table-hover" id="usersTable">
-                        <thead>
+                    <table class="table table-striped table-hover align-middle admin-table" id="usersTable">
+                        <thead class="table-light">
                             <tr>
                                 <th>ID</th>
                                 <th>Username</th>
@@ -37,7 +37,7 @@
                                 <th>Bookings</th>
                                 <th>Active</th>
                                 <th>Created</th>
-                                <th>Actions</th>
+                                <th class="text-end">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,7 +50,7 @@
                                         <span class="badge bg-info">You</span>
                                     {% endif %}
                                 </td>
-                                <td>{{ user.email }}</td>
+                                <td class="text-break">{{ user.email }}</td>
                                 <td>
                                     {% if user.role == 'admin' %}
                                         <span class="badge bg-danger">Admin</span>
@@ -77,8 +77,9 @@
                                         {{ user.created_at.strftime('%Y-%m-%d') if user.created_at else 'N/A' }}
                                     </small>
                                 </td>
-                                <td>
+                                <td class="text-end">
                                     {% if user.user_id != current_user.id %}
+                                    <div class="table-actions">
                                     <button type="button" class="btn btn-sm btn-outline-primary" 
                                             data-bs-toggle="modal" 
                                             data-bs-target="#editUserModal{{ user.user_id }}">
@@ -92,6 +93,7 @@
                                             <i class="fas fa-trash me-1"></i>Delete
                                         </button>
                                     </form>
+                                    </div>
                                     {% else %}
                                     <span class="text-muted small">Current user</span>
                                     {% endif %}

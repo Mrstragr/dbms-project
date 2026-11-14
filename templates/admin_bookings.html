@@ -5,9 +5,9 @@
 {% block content %}
 <div class="row mb-4">
     <div class="col-12">
-        <div class="d-flex align-items-center justify-content-between">
+        <div class="page-header mb-0">
             <h3 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>All Bookings</h3>
-            <div class="input-group" style="max-width: 300px;">
+            <div class="input-group table-search">
                 <span class="input-group-text bg-transparent text-muted"><i class="fas fa-search"></i></span>
                 <input type="text" id="searchInput" class="form-control" placeholder="Search bookings..." oninput="filterBookings()">
             </div>
@@ -17,7 +17,7 @@
 
 <div class="row mb-3">
     <div class="col-12">
-        <div class="btn-group" role="group">
+        <div class="btn-group flex-wrap" role="group" aria-label="Filter by status">
             <button class="btn btn-outline-primary btn-sm" onclick="filterByStatus('all')">All</button>
             <button class="btn btn-outline-primary btn-sm" onclick="filterByStatus('active')">Active</button>
             <button class="btn btn-outline-primary btn-sm" onclick="filterByStatus('returned')">Returned</button>
@@ -38,8 +38,8 @@
             <div class="card-body">
                 {% if bookings %}
                 <div class="table-responsive">
-                    <table class="table table-hover" id="bookingsTable">
-                        <thead>
+                    <table class="table table-striped table-hover align-middle admin-table" id="bookingsTable">
+                        <thead class="table-light">
                             <tr>
                                 <th>ID</th>
                                 <th>User</th>
@@ -94,11 +94,11 @@
                                     {% if booking.status == 'active' and booking.return_date %}
                                         {% set days_diff = ((booking.return_date - datetime.now()).days) %}
                                         {% if days_diff < 0 %}
-                                            <span class="badge bg-danger">{{ -days_diff }} days overdue</span>
+                                            <span class="badge status-badge status-overdue">{{ -days_diff }} days overdue</span>
                                         {% elif days_diff <= 3 %}
-                                            <span class="badge bg-warning">{{ days_diff }} days left</span>
+                                            <span class="badge status-badge status-booked">{{ days_diff }} days left</span>
                                         {% else %}
-                                            <span class="badge bg-success">{{ days_diff }} days left</span>
+                                            <span class="badge status-badge status-available">{{ days_diff }} days left</span>
                                         {% endif %}
                                     {% else %}
                                         <span class="text-muted">-</span>

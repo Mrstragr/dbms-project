@@ -481,3 +481,18 @@ small, .small { font-size: 0.85em; }
 .equipment-search { min-width: 220px; flex: 1 1 220px; }
 .detail-label { color: var(--muted); }
 .detail-label strong { font-weight: 600; }
+
+/* Admin tables */
+.table-search { max-width: 300px; flex: 1 1 220px; }
+.admin-table { margin-bottom: 0; }
+.admin-table thead th { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; border-bottom-width: 1px; }
+.admin-table td { vertical-align: middle; }
+.admin-table tbody tr { transition: background-color .15s ease; }
+.table-actions { display: inline-flex; flex-wrap: nowrap; align-items: center; justify-content: flex-end; gap: var(--space-1); }
+.table-actions form { margin: 0; }
+.table-actions .btn { text-transform: none; letter-spacing: 0; white-space: nowrap; }
+.table-actions .btn:hover { transform: none; box-shadow: none; }
+@media (max-width: 576px) {
+	.table-search { max-width: none; }
+	.admin-table { font-size: .875rem; }
+}

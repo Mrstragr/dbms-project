@@ -4,10 +4,11 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-md-8 mx-auto">
-        <div class="card">
+    <div class="col-lg-8 col-xl-7 mx-auto">
+        <div class="card form-card">
             <div class="card-header">
-                <h4><i class="fas fa-plus me-2"></i>Add Maintenance Record</h4>
+                <h4 class="mb-0"><i class="fas fa-plus me-2"></i>Add Maintenance Record</h4>
+                <small class="text-muted">Log service work performed on a piece of equipment</small>
             </div>
             <div class="card-body">
                 <form method="POST">
@@ -45,8 +46,8 @@
                         <input type="number" class="form-control" id="cost" name="cost" step="0.01" min="0" required>
                     </div>
                     
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{{ url_for('maintenance') }}" class="btn btn-secondary me-md-2">Cancel</a>
+                    <div class="form-actions">
+                        <a href="{{ url_for('maintenance') }}" class="btn btn-outline-secondary">Cancel</a>
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save me-2"></i>Add Record
                         </button>

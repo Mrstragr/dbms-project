@@ -20,6 +20,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+app.jinja_env.globals['datetime'] = datetime
 app.secret_key = os.getenv('SECRET_KEY', 'dev-secret-change-me')
 csrf = CSRFProtect(app)
 

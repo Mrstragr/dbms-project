@@ -128,7 +128,7 @@
 </div>
 
 <!-- Lab Manuals Section -->
-<div id="manuals-section" class="row mb-4" style="display: none;">
+<div id="manuals-section" class="row mb-4 resource-section">
     <div class="col-12">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -192,7 +192,7 @@
 </div>
 
 <!-- Video Tutorials Section -->
-<div id="videos-section" class="row mb-4" style="display: none;">
+<div id="videos-section" class="row mb-4 resource-section">
     <div class="col-12">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -235,7 +235,7 @@
 </div>
 
 <!-- FAQs Section -->
-<div id="faqs-section" class="row mb-4" style="display: none;">
+<div id="faqs-section" class="row mb-4 resource-section">
     <div class="col-12">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -302,7 +302,7 @@
 </div>
 
 <!-- Equipment Guides Section -->
-<div id="guides-section" class="row mb-4" style="display: none;">
+<div id="guides-section" class="row mb-4 resource-section">
     <div class="col-12">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -397,7 +397,7 @@ function showCategory(category) {
     hideAllCategories();
 
     // Show selected category
-    document.getElementById(category + '-section').style.display = 'block';
+    document.getElementById(category + '-section').style.display = 'flex';
 
     // Scroll to the section
     document.getElementById(category + '-section').scrollIntoView({ behavior: 'smooth' });

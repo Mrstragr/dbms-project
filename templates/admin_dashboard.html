@@ -5,7 +5,7 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="page-header">
             <div>
                 <h3 class="mb-0"><i class="fas fa-gauge-high me-2"></i>Admin Dashboard</h3>
                 <small class="text-muted">System Overview & Management</small>
@@ -25,46 +25,50 @@
 <!-- Admin Statistics Section -->
 <div class="row mb-4">
     <div class="col-12">
-        <div class="card border-primary">
-            <div class="card-header bg-primary text-white">
+        <div class="card section-card">
+            <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>System Analytics</h5>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-3 mb-3">
-                        <div class="card bg-light">
-                            <div class="card-body text-center">
-                                <h2 class="text-primary">{{ admin_stats.total_equipment }}</h2>
-                                <p class="mb-0 text-muted">Total Equipment</p>
+                <div class="row g-3">
+                    <div class="col-6 col-lg-3">
+                        <div class="stat-tile stat-primary">
+                            <div class="stat-tile-icon"><i class="fas fa-laptop"></i></div>
+                            <div class="stat-tile-body">
+                                <div class="stat-tile-value">{{ admin_stats.total_equipment }}</div>
+                                <div class="stat-tile-label">Total Equipment</div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="card bg-light">
-                            <div class="card-body text-center">
-                                <h2 class="text-success">{{ admin_stats.active_bookings }}</h2>
-                                <p class="mb-0 text-muted">Active Bookings</p>
+                    <div class="col-6 col-lg-3">
+                        <div class="stat-tile stat-success">
+                            <div class="stat-tile-icon"><i class="fas fa-calendar-check"></i></div>
+                            <div class="stat-tile-body">
+                                <div class="stat-tile-value">{{ admin_stats.active_bookings }}</div>
+                                <div class="stat-tile-label">Active Bookings</div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="card bg-light">
-                            <div class="card-body text-center">
-                                <h2 class="text-info">{{ admin_stats.total_users }}</h2>
-                                <p class="mb-0 text-muted">Total Users</p>
+                    <div class="col-6 col-lg-3">
+                        <div class="stat-tile stat-info">
+                            <div class="stat-tile-icon"><i class="fas fa-users"></i></div>
+                            <div class="stat-tile-body">
+                                <div class="stat-tile-value">{{ admin_stats.total_users }}</div>
+                                <div class="stat-tile-label">Total Users</div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <div class="card bg-light">
-                            <div class="card-body text-center">
-                                <h2 class="text-danger">{{ admin_stats.overdue_count }}</h2>
-                                <p class="mb-0 text-muted">Overdue Returns</p>
+                    <div class="col-6 col-lg-3">
+                        <div class="stat-tile stat-danger">
+                            <div class="stat-tile-icon"><i class="fas fa-clock"></i></div>
+                            <div class="stat-tile-body">
+                                <div class="stat-tile-value">{{ admin_stats.overdue_count }}</div>
+                                <div class="stat-tile-label">Overdue Returns</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row mt-3">
+                <div class="row mt-3 g-3">
                     <div class="col-md-6">
                         <h6>Equipment Status Distribution</h6>
                         <ul class="list-group">
@@ -89,14 +93,14 @@
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-12">
-                        <a href="{{ url_for('admin_equipment') }}" class="btn btn-primary me-2">
+                    <div class="col-12 d-flex flex-wrap gap-2">
+                        <a href="{{ url_for('admin_equipment') }}" class="btn btn-primary">
                             <i class="fas fa-cog me-2"></i>Manage Equipment
                         </a>
-                        <a href="{{ url_for('admin_users') }}" class="btn btn-info me-2">
+                        <a href="{{ url_for('admin_users') }}" class="btn btn-info">
                             <i class="fas fa-users me-2"></i>Manage Users
                         </a>
-                        <a href="{{ url_for('admin_bookings') }}" class="btn btn-success me-2">
+                        <a href="{{ url_for('admin_bookings') }}" class="btn btn-success">
                             <i class="fas fa-calendar me-2"></i>View Bookings
                         </a>
                         <a href="{{ url_for('notifications') }}" class="btn btn-warning">
@@ -118,25 +122,25 @@
             </div>
             <div class="card-body">
                 <div class="row g-3">
-                    <div class="col-md-3">
+                    <div class="col-6 col-md-3">
                         <a href="{{ url_for('add_equipment') }}" class="btn btn-outline-primary w-100 h-100 d-flex flex-column align-items-center p-3">
                             <i class="fas fa-plus-circle fa-2x mb-2"></i>
                             <span>Add Equipment</span>
                         </a>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-6 col-md-3">
                         <a href="{{ url_for('admin_users') }}" class="btn btn-outline-success w-100 h-100 d-flex flex-column align-items-center p-3">
                             <i class="fas fa-user-plus fa-2x mb-2"></i>
                             <span>Manage Users</span>
                         </a>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-6 col-md-3">
                         <a href="{{ url_for('admin_bookings') }}" class="btn btn-outline-info w-100 h-100 d-flex flex-column align-items-center p-3">
                             <i class="fas fa-calendar-check fa-2x mb-2"></i>
                             <span>View Bookings</span>
                         </a>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-6 col-md-3">
                         <a href="{{ url_for('maintenance') }}" class="btn btn-outline-warning w-100 h-100 d-flex flex-column align-items-center p-3">
                             <i class="fas fa-tools fa-2x mb-2"></i>
                             <span>Maintenance</span>
@@ -151,7 +155,7 @@
 <!-- Main Content Area -->
 <div class="row">
     <!-- Recent Activity -->
-    <div class="col-md-8">
+    <div class="col-lg-8">
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">
@@ -292,7 +296,7 @@
     </div>
 
     <!-- Sidebar Widgets -->
-    <div class="col-md-4">
+    <div class="col-lg-4">
         <!-- System Alerts -->
         <div class="card mb-4">
             <div class="card-header">

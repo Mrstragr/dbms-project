@@ -461,3 +461,8 @@ small, .small { font-size: 0.85em; }
 
 /* Dashboard quick actions */
 .quick-action, .row.g-3 > [class*="col-"] > .btn.flex-column { border-radius: var(--radius); font-weight: 500; text-transform: none; letter-spacing: 0; }
+
+/* Section cards (dashboards / analytics) */
+.section-card > .card-header { background: var(--panel-2); border-bottom: 1px solid var(--border); }
+.section-card > .card-header h5 i, .section-card > .card-header h6 i { color: var(--primary); }
+.card canvas { max-width: 100%; height: auto !important; }

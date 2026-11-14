@@ -5,7 +5,7 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="page-header">
             <div>
                 <h2 class="mb-0"><i class="fas fa-user-circle me-2"></i>My Profile</h2>
                 <small class="text-muted">Manage your account settings and view your activity</small>
@@ -25,15 +25,15 @@
         <div class="card profile-header-card">
             <div class="card-body">
                 <div class="row align-items-center">
-                    <div class="col-md-2 text-center">
-                        <div class="profile-avatar mb-3 mb-md-0">
-                            <i class="fas fa-user-circle fa-4x text-primary"></i>
+                    <div class="col-md-2 col-lg-auto text-center">
+                        <div class="profile-avatar mx-auto mb-3 mb-md-0">
+                            <i class="fas fa-user"></i>
                         </div>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 col-lg text-center text-md-start">
                         <h4 class="mb-1">{{ user.username }}</h4>
                         <p class="text-muted mb-2">{{ user.email }}</p>
-                        <div class="d-flex gap-2 flex-wrap">
+                        <div class="d-flex gap-2 flex-wrap justify-content-center justify-content-md-start">
                             <span class="badge bg-{% if user.role == 'admin' %}danger{% elif user.role == 'faculty' %}info{% else %}success{% endif %}">
                                 <i class="fas fa-{% if user.role == 'admin' %}crown{% elif user.role == 'faculty' %}graduation-cap{% else %}user-graduate{% endif %} me-1"></i>
                                 {{ user.role.title() }}
@@ -44,7 +44,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="col-md-3 text-md-end">
+                    <div class="col-md-3 text-center text-md-end mt-3 mt-md-0">
                         <div class="profile-stats">
                             <div class="stat-item">
                                 <h3 class="text-primary mb-0">{{ stats.total_bookings or 0 }}</h3>
@@ -62,7 +62,7 @@
     <!-- Main Content -->
     <div class="col-lg-8">
         <!-- Edit Profile -->
-        <div class="card mb-4">
+        <div class="card section-card mb-4">
             <div class="card-header d-flex align-items-center">
                 <i class="fas fa-edit me-2 text-primary"></i>
                 <h5 class="mb-0">Edit Profile Information</h5>
@@ -109,7 +109,7 @@
                         </div>
                     </div>
 
-                    <div class="d-flex gap-2">
+                    <div class="d-flex flex-wrap gap-2 profile-form-actions">
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save me-2"></i>Update Profile
                         </button>
@@ -122,7 +122,7 @@
         </div>
 
         <!-- Change Password -->
-        <div class="card">
+        <div class="card section-card mb-4 mb-lg-0">
             <div class="card-header d-flex align-items-center">
                 <i class="fas fa-lock me-2 text-warning"></i>
                 <h5 class="mb-0">Change Password</h5>
@@ -183,7 +183,7 @@
                         </div>
                     </div>
 
-                    <div class="d-flex gap-2">
+                    <div class="d-flex flex-wrap gap-2 profile-form-actions">
                         <button type="submit" class="btn btn-warning">
                             <i class="fas fa-key me-2"></i>Change Password
                         </button>

@@ -5,7 +5,7 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="page-header">
             <div>
                 <h2 class="mb-0"><i class="fas fa-bell me-2"></i>Notifications Center</h2>
                 <small class="text-muted">Stay updated with your lab activities and system alerts</small>
@@ -25,36 +25,40 @@
 </div>
 
 <!-- Notification Stats -->
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card stat-card">
-            <div class="card-body text-center">
-                <h4 class="text-primary">{{ notifications|length }}</h4>
-                <small class="text-muted">Total Notifications</small>
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile stat-primary">
+            <div class="stat-tile-icon"><i class="fas fa-bell"></i></div>
+            <div class="stat-tile-body">
+                <div class="stat-tile-value">{{ notifications|length }}</div>
+                <div class="stat-tile-label">Total Notifications</div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card stat-card">
-            <div class="card-body text-center">
-                <h4 class="text-info">{{ unread_count }}</h4>
-                <small class="text-muted">Unread</small>
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile stat-info">
+            <div class="stat-tile-icon"><i class="fas fa-envelope"></i></div>
+            <div class="stat-tile-body">
+                <div class="stat-tile-value">{{ unread_count }}</div>
+                <div class="stat-tile-label">Unread</div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card stat-card">
-            <div class="card-body text-center">
-                <h4 class="text-success">{{ notifications|selectattr('type', 'equalto', 'booking')|list|length }}</h4>
-                <small class="text-muted">Booking Updates</small>
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile stat-success">
+            <div class="stat-tile-icon"><i class="fas fa-calendar-check"></i></div>
+            <div class="stat-tile-body">
+                <div class="stat-tile-value">{{ notifications|selectattr('type', 'equalto', 'booking')|list|length }}</div>
+                <div class="stat-tile-label">Booking Updates</div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card stat-card">
-            <div class="card-body text-center">
-                <h4 class="text-warning">{{ notifications|selectattr('type', 'equalto', 'maintenance')|list|length }}</h4>
-                <small class="text-muted">Maintenance Alerts</small>
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile stat-warning">
+            <div class="stat-tile-icon"><i class="fas fa-tools"></i></div>
+            <div class="stat-tile-body">
+                <div class="stat-tile-value">{{ notifications|selectattr('type', 'equalto', 'maintenance')|list|length }}</div>
+                <div class="stat-tile-label">Maintenance Alerts</div>
             </div>
         </div>
     </div>
@@ -65,7 +69,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <ul class="nav nav-tabs" id="notificationTabs" role="tablist">
+                <ul class="nav nav-tabs notification-tabs" id="notificationTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all-notifications"
                                 type="button" role="tab" aria-controls="all-notifications" aria-selected="true">
@@ -460,6 +464,7 @@ function markAsRead(notificationId) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token() }}',
         },
         body: JSON.stringify({})
     })
@@ -498,6 +503,7 @@ function markAllAsRead() {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token() }}',
         },
         body: JSON.stringify({})
     })

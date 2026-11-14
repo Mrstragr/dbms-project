@@ -3,40 +3,52 @@
 {% block title %}Login - SAU Lab Management{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-12">
-            <div class="text-center mb-5">
-                <h1 class="display-5 fw-bold text-white mb-3">Welcome to SAU Lab Management</h1>
-                <p class="lead text-muted">Select your role to access the system</p>
+<div class="auth-wrapper">
+    <div class="card auth-card">
+        <div class="card-body">
+            <div class="text-center mb-4">
+                <div class="auth-icon"><i class="fas fa-flask"></i></div>
+                <h1 class="auth-title">Welcome back</h1>
+                <p class="text-muted mb-0">Sign in to SAU Lab Resource Management</p>
             </div>
-        </div>
-    </div>
 
-    <div class="row justify-content-center g-4">
-        <!-- Student Login -->
-        <div class="col-md-4 col-lg-3">
-            <div class="card h-100 border-primary student-card">
-                <div class="card-header bg-primary text-white text-center">
-                    <i class="fas fa-user-graduate fa-2x mb-2"></i>
-                    <h5 class="mb-0">Student Portal</h5>
-                    <small>Access equipment booking & resources</small>
-                </div>
-                <div class="card-body">
+            <ul class="nav nav-pills nav-fill auth-tabs mb-4" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pane-student" type="button" role="tab" aria-controls="pane-student" aria-selected="true">
+                        <i class="fas fa-user-graduate me-1"></i>Student
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-faculty" type="button" role="tab" aria-controls="pane-faculty" aria-selected="false">
+                        <i class="fas fa-chalkboard-teacher me-1"></i>Faculty
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pane-admin" type="button" role="tab" aria-controls="pane-admin" aria-selected="false">
+                        <i class="fas fa-crown me-1"></i>Admin
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <!-- Student Login -->
+                <div class="tab-pane fade show active" id="pane-student" role="tabpanel">
                     <form method="POST" class="student-form">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="role" value="student">
                         <div class="mb-3">
-                            <label for="student_email" class="form-label">
-                                <i class="fas fa-envelope me-1"></i>Email
-                            </label>
-                            <input type="email" class="form-control" id="student_email" name="email" placeholder="student@sau.edu" required>
+                            <label for="student_email" class="form-label">Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input type="email" class="form-control" id="student_email" name="email" placeholder="student@sau.edu" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="student_password" class="form-label">
-                                <i class="fas fa-lock me-1"></i>Password
-                            </label>
-                            <input type="password" class="form-control" id="student_password" name="password" placeholder="Enter password" required>
+                        <div class="mb-4">
+                            <label for="student_password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="student_password" name="password" placeholder="Enter password" required>
+                            </div>
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">
@@ -44,135 +56,74 @@
                             </button>
                         </div>
                     </form>
+                    <p class="auth-footer">
+                        New student?
+                        <a href="{{ url_for('signup') }}">Register here</a>
+                    </p>
                 </div>
-                <div class="card-footer text-center bg-light">
-                    <small class="text-muted">New student?</small>
-                    <a href="{{ url_for('signup') }}" class="text-primary ms-1">Register here</a>
-                </div>
-            </div>
-        </div>
 
-        <!-- Faculty Login -->
-        <div class="col-md-4 col-lg-3">
-            <div class="card h-100 border-success faculty-card">
-                <div class="card-header bg-success text-white text-center">
-                    <i class="fas fa-chalkboard-teacher fa-2x mb-2"></i>
-                    <h5 class="mb-0">Faculty Portal</h5>
-                    <small>Manage resources & oversee operations</small>
-                </div>
-                <div class="card-body">
+                <!-- Faculty Login -->
+                <div class="tab-pane fade" id="pane-faculty" role="tabpanel">
                     <form method="POST" class="faculty-form">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="role" value="faculty">
                         <div class="mb-3">
-                            <label for="faculty_email" class="form-label">
-                                <i class="fas fa-envelope me-1"></i>Email
-                            </label>
-                            <input type="email" class="form-control" id="faculty_email" name="email" placeholder="faculty@sau.edu" required>
+                            <label for="faculty_email" class="form-label">Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input type="email" class="form-control" id="faculty_email" name="email" placeholder="faculty@sau.edu" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="faculty_password" class="form-label">
-                                <i class="fas fa-lock me-1"></i>Password
-                            </label>
-                            <input type="password" class="form-control" id="faculty_password" name="password" placeholder="Enter password" required>
+                        <div class="mb-4">
+                            <label for="faculty_password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="faculty_password" name="password" placeholder="Enter password" required>
+                            </div>
                         </div>
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-success">
+                            <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-sign-in-alt me-2"></i>Login as Faculty
                             </button>
                         </div>
                     </form>
+                    <p class="auth-footer">
+                        New faculty?
+                        <a href="{{ url_for('signup') }}">Register here</a>
+                    </p>
                 </div>
-                <div class="card-footer text-center bg-light">
-                    <small class="text-muted">New faculty?</small>
-                    <a href="{{ url_for('signup') }}" class="text-success ms-1">Register here</a>
-                </div>
-            </div>
-        </div>
 
-        <!-- Admin Login -->
-        <div class="col-md-4 col-lg-3">
-            <div class="card h-100 border-warning admin-card">
-                <div class="card-header bg-warning text-dark text-center">
-                    <i class="fas fa-crown fa-2x mb-2"></i>
-                    <h5 class="mb-0">Admin Portal</h5>
-                    <small>Full system administration</small>
-                </div>
-                <div class="card-body">
+                <!-- Admin Login -->
+                <div class="tab-pane fade" id="pane-admin" role="tabpanel">
                     <form method="POST" class="admin-form">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="role" value="admin">
                         <div class="mb-3">
-                            <label for="admin_email" class="form-label">
-                                <i class="fas fa-envelope me-1"></i>Email
-                            </label>
-                            <input type="email" class="form-control" id="admin_email" name="email" placeholder="admin@sau.edu" required>
+                            <label for="admin_email" class="form-label">Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input type="email" class="form-control" id="admin_email" name="email" placeholder="admin@sau.edu" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="admin_password" class="form-label">
-                                <i class="fas fa-lock me-1"></i>Password
-                            </label>
-                            <input type="password" class="form-control" id="admin_password" name="password" placeholder="Enter password" required>
+                        <div class="mb-4">
+                            <label for="admin_password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="admin_password" name="password" placeholder="Enter password" required>
+                            </div>
                         </div>
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-warning">
+                            <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-sign-in-alt me-2"></i>Login as Admin
                             </button>
                         </div>
                     </form>
-                </div>
-                <div class="card-footer text-center bg-light">
-                    <small class="text-muted">Authorized personnel only</small>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Info Section -->
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-md-4">
-                            <i class="fas fa-laptop fa-3x text-primary mb-3"></i>
-                            <h6>Equipment Management</h6>
-                            <p class="small text-muted">Book, track, and manage lab equipment efficiently</p>
-                        </div>
-                        <div class="col-md-4">
-                            <i class="fas fa-calendar-check fa-3x text-success mb-3"></i>
-                            <h6>Smart Scheduling</h6>
-                            <p class="small text-muted">Automated booking system with conflict resolution</p>
-                        </div>
-                        <div class="col-md-4">
-                            <i class="fas fa-chart-line fa-3x text-info mb-3"></i>
-                            <h6>Analytics & Reports</h6>
-                            <p class="small text-muted">Comprehensive insights and maintenance tracking</p>
-                        </div>
-                    </div>
+                    <p class="auth-footer">
+                        <i class="fas fa-shield-halved me-1"></i>Authorized personnel only
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-.student-card { border-width: 2px; }
-.faculty-card { border-width: 2px; }
-.admin-card { border-width: 2px; }
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-}
-
-.btn-primary:hover { background-color: #0056b3; }
-.btn-success:hover { background-color: #0f5132; }
-.btn-warning:hover { background-color: #664d03; }
-
-@media (max-width: 768px) {
-    .display-5 { font-size: 2rem; }
-    .col-md-4 { margin-bottom: 1rem; }
-}
-</style>
 {% endblock %}

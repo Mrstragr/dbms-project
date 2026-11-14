@@ -6,6 +6,35 @@ A comprehensive Flask-based web application for managing laboratory equipment, b
 
 This system efficiently manages laboratory equipment (laptops, projectors, oscilloscopes, etc.) by tracking bookings, returns, and maintenance, ensuring real-time availability with automated notifications for overdue returns and maintenance reminders.
 
+## ✨ Recent Updates (UI Polish)
+
+### Summary
+Every page now shares a consistent look and feel:
+- **Design tokens**: CSS variables for the primary color, radius, shadows and spacing, plus base typography (`static/css/style.css`)
+- **Navigation**: Sidebar branded "SAU Lab Resource Management" with icons, active-link highlighting and a collapsible mobile menu
+- **Layout**: Consistent page container spacing and footer
+- **Login / Sign Up**: Centered cards with an icon and a clean form (login uses Student / Faculty / Admin tabs)
+- **Dashboards**: Stat cards with icons on the student, faculty and admin dashboards and on admin analytics
+- **Status badges**: Available = green, Booked = yellow, Maintenance = red, Overdue = dark red
+- **Tables & forms**: Striped/hover admin tables with aligned action buttons; consistent add/edit form layout
+- **Empty states**: Friendly messages such as "No bookings yet" instead of blank tables
+- **Mobile**: Responsive layouts across pages; duplicated inline styles moved into `style.css`
+
+### Bug Fixes
+- **dashboard.html**: Closed the unclosed `content` block so all templates compile
+- **Flash messages**: Correct colors per category (error, success, warning, info) instead of everything non-error showing green
+- **Notifications**: "Mark Read" / "Mark All Read" now send the CSRF token, so the requests are no longer rejected
+- **Alerts**: Auto-hide (after 4 seconds) now applies only to flash messages; in-page notices such as account limitations stay visible
+- **`showAlert()`**: Inserts alerts into the existing page container (it previously looked for a `.container` element that does not exist)
+- **Templates**: `datetime` is exposed to Jinja templates, so the dashboards, admin bookings and notifications pages render when there are active or overdue bookings
+
+### How to Update
+```bash
+git pull origin main
+python app.py
+```
+No new packages and no database changes are needed.
+
 ## 👥 Team Structure
 
 - **Ansh** - DB Designer (ER Diagram, Schema Design, Normalization) and Backend Design
@@ -52,7 +81,7 @@ This system efficiently manages laboratory equipment (laptops, projectors, oscil
 
 1. **Clone/Download the project**
    ```bash
-   cd /Users/nikhilanand/Desktop/dbms
+   cd dbms-project
    ```
 
 2. **Install Python dependencies**

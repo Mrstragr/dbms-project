@@ -8,14 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
         card.classList.add('fade-in');
     });
 
-    // Auto-hide alerts after 5 seconds
-    const alerts = document.querySelectorAll('.alert');
-    alerts.forEach(alert => {
-        setTimeout(() => {
-            const bsAlert = new bootstrap.Alert(alert);
-            bsAlert.close();
-        }, 5000);
-    });
+    // Auto-hide flash messages after 4 seconds (in-page alerts stay visible)
+    document.querySelectorAll('.flash-alert').forEach(autoHideAlert);
 
     // Confirm actions
     const confirmButtons = document.querySelectorAll('[onclick*="confirm"]');
@@ -58,22 +52,35 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+const ALERT_HIDE_DELAY = 4000;
+const ALERT_ICONS = { danger: 'circle-exclamation', success: 'circle-check', warning: 'triangle-exclamation', info: 'circle-info' };
+
+function autoHideAlert(alert) {
+    setTimeout(() => {
+        if (document.body.contains(alert)) {
+            bootstrap.Alert.getOrCreateInstance(alert).close();
+        }
+    }, ALERT_HIDE_DELAY);
+}
+
 function showAlert(message, type = 'info') {
     const alertDiv = document.createElement('div');
-    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
-    alertDiv.innerHTML = `
-        ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    `;
-    
-    const container = document.querySelector('.container');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show flash-alert`;
+    alertDiv.setAttribute('role', 'alert');
+    const icon = document.createElement('i');
+    icon.className = `fas fa-${ALERT_ICONS[type] || ALERT_ICONS.info} me-2`;
+    alertDiv.appendChild(icon);
+    alertDiv.appendChild(document.createTextNode(message));
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'btn-close';
+    closeBtn.setAttribute('data-bs-dismiss', 'alert');
+    closeBtn.setAttribute('aria-label', 'Close');
+    alertDiv.appendChild(closeBtn);
+
+    const container = document.querySelector('.content .page-container') || document.body;
     container.insertBefore(alertDiv, container.firstChild);
-    
-    // Auto-hide after 5 seconds
-    setTimeout(() => {
-        const bsAlert = new bootstrap.Alert(alertDiv);
-        bsAlert.close();
-    }, 5000);
+    autoHideAlert(alertDiv);
 }
 
 function updateStatusCounts() {

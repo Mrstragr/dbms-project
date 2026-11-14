@@ -121,6 +121,11 @@ small, .small { font-size: 0.85em; }
 .page-container { width: 100%; max-width: 1320px; margin: 0 auto; }
 .flash-container { padding: var(--space-3) var(--space-4) 0; }
 .flash-container .alert { margin-bottom: var(--space-2); }
+.flash-alert { border: 0; border-left: 4px solid currentColor; box-shadow: var(--shadow-sm); display: flex; align-items: center; }
+.flash-alert.alert-success { color: #0f5132; background: #d1e7dd; }
+.flash-alert.alert-danger { color: #842029; background: #f8d7da; }
+.flash-alert.alert-warning { color: #664d03; background: #fff3cd; }
+.flash-alert.alert-info { color: #055160; background: #cff4fc; }
 .footer { flex-shrink: 0; border-top: 1px solid var(--border); padding: var(--space-3) var(--space-4); background: var(--panel); }
 .footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-2) var(--space-4); }
 .footer i { color: var(--primary); }

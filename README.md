@@ -2,11 +2,11 @@
 
 A comprehensive Flask-based web application for managing laboratory equipment, bookings, returns, and maintenance tracking.
 
-## 🚀 Project Overview
+##  Project Overview
 
 This system efficiently manages laboratory equipment (laptops, projectors, oscilloscopes, etc.) by tracking bookings, returns, and maintenance, ensuring real-time availability with automated notifications for overdue returns and maintenance reminders.
 
-## ✨ Recent Updates (UI Polish)
+##  Recent Updates (UI Polish)
 
 ### Summary
 Every page now shares a consistent look and feel:
@@ -35,7 +35,7 @@ python app.py
 ```
 No new packages and no database changes are needed.
 
-## 🤝 Recent Contributions (14 November 2026)
+##  Recent Contributions (14 November 2026)
 
 The following UI, usability, and bug-fix improvements were contributed by **Amarkumar30**. These changes are included in the `main` branch.
 
@@ -66,7 +66,7 @@ These updates are application/UI and maintenance changes. According to the updat
 - **Contribution period:** 14 November 2026
 - **Commit history:** [View the contributor's commits](https://github.com/Mrstragr/dbms-project/commits/main)
 
-## 👥 Team Structure
+##  Team Structure
 
 - **Ansh** - DB Designer (ER Diagram, Schema Design, Normalization) and Backend Design
 - **Amar** - DB Administrator (Database Setup, Security, Backup)
@@ -74,7 +74,7 @@ These updates are application/UI and maintenance changes. According to the updat
 - **Prakash** - Query & Optimization Specialist (SQL Queries, Performance)
 - **Krish** - Tester & Documentation Lead (Testing, Documentation)
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 - **Backend**: Python Flask
 - **Database**: MySQL
@@ -83,17 +83,17 @@ These updates are application/UI and maintenance changes. According to the updat
 - **Icons**: Font Awesome
 - **Development**: XAMPP/MySQL Workbench
 
-## 📋 Features
+##  Features
 
 ### Core Functionality
-- ✅ User Authentication & Role Management
-- ✅ Equipment CRUD Operations
-- ✅ Equipment Booking & Return System
-- ✅ Maintenance Tracking & Scheduling
-- ✅ Real-time Notifications
-- ✅ Overdue Return Alerts
-- ✅ Maintenance Reminders
-- ✅ Responsive Web Interface
+-  User Authentication & Role Management
+-  Equipment CRUD Operations
+-  Equipment Booking & Return System
+-  Maintenance Tracking & Scheduling
+-  Real-time Notifications
+-  Overdue Return Alerts
+-  Maintenance Reminders
+-  Responsive Web Interface
 
 ### User Roles
 - **Students**: Book and return equipment, view availability
@@ -101,7 +101,7 @@ These updates are application/UI and maintenance changes. According to the updat
 - **Faculty**: Full system access, approve requests
 - **Admin**: Complete system administration
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Python 3.7+
@@ -146,7 +146,7 @@ These updates are application/UI and maintenance changes. According to the updat
 6. **Access the Application**
    - Open browser and go to: `http://localhost:5000`
 
-## 🔐 Default Login Credentials
+##  Default Login Credentials
 
 | Role | Username | Email | Password |
 |------|----------|-------|----------|
@@ -155,7 +155,7 @@ These updates are application/UI and maintenance changes. According to the updat
 | Lab Assistant | jane_smith | jane.smith@sau.edu | password123 |
 | Faculty | prof_wilson | prof.wilson@sau.edu | password123 |
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 dbms/
@@ -184,7 +184,7 @@ dbms/
         └── main.js
 ```
 
-## 🔧 Configuration
+##  Configuration
 
 ### Configuration
 - The app reads settings from environment variables via `.env` (see `env.example`).
@@ -197,7 +197,7 @@ For production deployment:
 - Implement proper user authentication
 - Enable HTTPS
 
-## 📊 Database Schema
+##  Database Schema
 
 ### Main Tables
 - **users**: User accounts and roles
@@ -211,7 +211,7 @@ For production deployment:
 - Equipment can have multiple bookings (1:many)
 - Equipment can have multiple maintenance records (1:many)
 
-## 🧪 Testing
+##  Testing
 
 ### Manual Testing Checklist
 - [ ] User registration and login
@@ -228,7 +228,7 @@ The `sample_data.sql` file includes:
 - Sample bookings and maintenance records
 - Test notifications
 
-## 🚀 Deployment
+##  Deployment
 
 ### Production Considerations
 1. **Database Security**
@@ -246,7 +246,7 @@ The `sample_data.sql` file includes:
    - Query optimization
    - Caching strategies
 
-## 🔄 Team Workflow
+##  Team Workflow
 
 1. **Ansh**: Provides ER diagram and SQL schema
 2. **Amar**: Sets up database and executes schema
@@ -254,7 +254,7 @@ The `sample_data.sql` file includes:
 4. **Prakash**: Optimizes queries and performance
 5. **Krish**: Tests all features and prepares documentation
 
-## 📈 Future Enhancements
+##  Future Enhancements
 
 - [ ] Email notifications
 - [ ] Mobile app integration
@@ -263,7 +263,7 @@ The `sample_data.sql` file includes:
 - [ ] Automated maintenance scheduling
 - [ ] Equipment usage analytics
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -280,7 +280,7 @@ The `sample_data.sql` file includes:
    - Ensure proper file permissions
    - Check database user privileges
 
-## 📞 Support
+##  Support
 
 For technical support or questions:
 - **Database Issues**: Contact Amar (DB Administrator)
@@ -288,7 +288,7 @@ For technical support or questions:
 - **Performance Issues**: Contact Prakash (Query Specialist)
 - **Testing Issues**: Contact Krish (Tester)
 
-## 📄 License
+##  License
 
 This project is developed for educational purposes as part of the SAU DBMS course.
 

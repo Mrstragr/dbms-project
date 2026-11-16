@@ -35,6 +35,37 @@ python app.py
 ```
 No new packages and no database changes are needed.
 
+## 🤝 Recent Contributions (14 November 2026)
+
+The following UI, usability, and bug-fix improvements were contributed by **Amarkumar30**. These changes are included in the `main` branch.
+
+### UI and User Experience
+- Introduced shared CSS design tokens for primary colours, typography, spacing, border radii, and shadows.
+- Refined the application navigation with updated branding, icons, active-link states, and a collapsible mobile sidebar.
+- Standardised page spacing and the footer across the application.
+- Redesigned the login and signup forms for a consistent authentication experience.
+- Improved student, faculty, and admin dashboard statistic cards and analytics presentation.
+- Added clearer equipment-status badges for available, booked, maintenance, and overdue states.
+- Refined admin tables, maintenance pages, add/edit forms, profile and notification screens.
+- Added friendly empty states and improved responsive layouts for smaller screens.
+- Consolidated repeated inline styling into the shared stylesheet.
+
+### Functional Fixes and Maintenance
+- Corrected the missing Jinja template block closure in `templates/dashboard.html`.
+- Exposed Python's `datetime` object to Jinja templates so date-dependent dashboard and notification views can render.
+- Corrected flash-message category styling and limited the four-second auto-hide behaviour to flash alerts.
+- Corrected alert insertion in the existing page layout.
+- Added CSRF token handling to notification actions such as **Mark Read** and **Mark All Read**.
+- Removed tracked Python `__pycache__` files from version control.
+
+### Database and Dependency Impact
+These updates are application/UI and maintenance changes. According to the update notes, they require no new Python packages and no database schema changes.
+
+### Contributor
+- **GitHub:** [Amarkumar30](https://github.com/Amarkumar30)
+- **Contribution period:** 14 November 2026
+- **Commit history:** [View the contributor's commits](https://github.com/Mrstragr/dbms-project/commits/main)
+
 ## 👥 Team Structure
 
 - **Ansh** - DB Designer (ER Diagram, Schema Design, Normalization) and Backend Design
